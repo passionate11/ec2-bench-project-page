@@ -148,9 +148,9 @@
             <article class="tldr-card">
               <span class="tldr-num">02</span>
               <h3 data-i18n="takeaways.c2h">Stronger edges converge on performance, not privacy</h3>
-              <p data-i18n="takeaways.c2p">The completion gap across strategies drops from <strong>25.22</strong> points
-              (2B) to under 5 for 27B (4.60) and Qwen3.7-Plus (<strong>4.76</strong>). Exposure stays spread out: at 27B,
-              strategies differ by 4.60 points in completion but by <strong>35.93</strong> in privacy exposure.</p>
+              <p data-i18n="takeaways.c2p">The completion gap across strategies narrows from <strong>25.22</strong> points
+              (Qwen3.5-2B) to <strong>4.76</strong> (Qwen3.7-Plus). Exposure does not converge: with Qwen3.7-Plus, strategies
+              differ by only 4.76 points in completion but by <strong>66.23</strong> in privacy exposure.</p>
             </article>
             <article class="tldr-card">
               <span class="tldr-num">03</span>
@@ -429,19 +429,19 @@
                 <p class="rq-q" data-i18n="find.f2q">How does increasing edge capability impact collaborative execution?</p>
                 <h3 data-i18n="find.f2h">Stronger edges close the performance gap, not the privacy gap.</h3>
                 <p data-i18n="find.f2p">The best collaborative configuration climbs from <strong>39.97</strong> (2B) to
-                <strong>76.84</strong> (Qwen3.7-Plus), approaching cloud-only's 82.70, and the completion spread across
-                strategies falls from 25.22 points to under 5. Privacy exposure stays spread out: at 27B, strategies differ
-                by 4.60 points in completion but by 35.93 in exposure.</p>
+                <strong>76.84</strong> (Qwen3.7-Plus), approaching cloud-only's 82.70, and the completion gap across
+                strategies narrows from 25.22 points to 4.76. Privacy exposure does not converge: with Qwen3.7-Plus,
+                strategies differ by only 4.76 points in completion but by 66.23 in exposure.</p>
               </div>
                   <figure class="fig-pair">
                     <div class="fig-pair-imgs">
-                      <img src="assets/figures/fig3a-completion-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Task completion across edge models 2B, 9B, 27B and Plus: the mean of collaboration configurations rises toward cloud-only, and the range across strategies drops from 25.22 points (2B) to 4.60 (27B) and 4.76 (Plus).">
+                      <img src="assets/figures/fig3a-completion-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Task completion across edge models 2B, 9B, 27B and Plus: the mean of collaboration configurations rises toward cloud-only, and the range across strategies narrows from 25.22 points (2B) to 4.76 (Plus).">
                       <img src="assets/figures/fig3b-exposure-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Privacy exposure across edge models: the range across collaboration strategies stays wide, between 32.87 and 66.23 points.">
                     </div>
                     <figcaption data-i18n="find.fig3cap">
                       <strong>Figure 3.</strong> Mean (dot) and range (bar) across collaboration
-                      strategies for each edge model. (a) The completion range narrows from 25.22 points (2B) to under 5 for 27B
-                      and Qwen3.7-Plus. (b) The privacy-exposure range stays wide, at 32.87 to 66.23 points.
+                      strategies for each edge model. (a) The completion range narrows from 25.22 points (Qwen3.5-2B) to 4.76
+                      (Qwen3.7-Plus). (b) The privacy-exposure range stays wide, reaching 66.23 points with Qwen3.7-Plus.
                     </figcaption>
                   </figure>
             </article>
@@ -570,6 +570,6 @@
       </div>
     </footer>
 
-    <script src="assets/app.js?v=20261012-ec2i"></script>
+    <script src="assets/app.js?v=20261012-ec2p"></script>
   </body>
 </html>
