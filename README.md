@@ -3,6 +3,9 @@
 Academic project page for **“Empowering Edge Agents: A Systematic Analysis of
 Edge-Cloud Collaboration in LLM Agent Execution”** (EC²-Bench, formerly AceBench).
 
+Live at **https://passionate11.github.io/ec2-bench-project-page/** (this repo was renamed from `ace-bench-project-page`;
+GitHub Pages URLs do not redirect, so the old `…/ace-bench-project-page/` address no longer works).
+
 The page is a single static `index.html` that tells the paper's story top to bottom:
 
 1. **Hero** — title, authors, action buttons, one-paragraph thesis, and the overview
@@ -34,7 +37,7 @@ python3 -m http.server 8080
   (**lower is better**). The table and plot (axis ranges included) update automatically.
 - **Figures** — `assets/figures/` holds PNGs rendered from the paper's figure PDFs:
   `fig1-overview.png` (Figure 1), `fig2a-cost.png` (Figure 2a, no-JS fallback),
-  `fig3a/b-*.png` (Figure 3), `fig4a/b-*.png` (Figure 4).
+  `fig3a/b-*-v2.png` (Figure 3, redrawn from the Table 2 numbers), `fig4a/b-*.png` (Figure 4).
 - **Copy / narrative** — edit `index.html` sections directly. Every translatable node has
   a `data-i18n` key; its Chinese text lives in `I18N_ZH` in `assets/app.js` — update both.
 - **Design tokens** — colors, spacing, and fonts live in the `:root` block of
@@ -48,9 +51,8 @@ python3 -m http.server 8080
 - `paper.pdf` is the full paper. Remove it (and the “Paper (PDF)” links in `index.html`)
   if you do not want the PDF public.
 - The hero tag reads “Benchmark & Empirical Study · 2026”; update it to the venue once accepted.
-- In `index.html` `<head>` there is a commented block with `canonical` / `og:image` /
-  `twitter:image` tags — uncomment it and fill in the final GitHub Pages URL so social
-  link-previews render an image.
+- `index.html` `<head>` sets `canonical` / `og:image` / `twitter:image` to the GitHub Pages
+  URL above — update them if the repo is renamed again.
 - The `<a href="https://github.com/OpenBMB/EC2-Bench">` links and the BibTeX `url` point at
   the public repo — update if the canonical location changes.
 

@@ -16,17 +16,16 @@
     <meta name="twitter:description" content="When cloud help is interleaved throughout an agent trajectory, how should edge and cloud collaborate? EC²-Bench measures task performance, resource usage, and privacy exposure jointly.">
     <meta name="author" content="Pengcheng Huang, Zhenghao Liu, Shixin Ren, Shi Yu, Sijia Yao, Yukun Yan, Chaojun Xiao, Maosong Sun">
     <meta name="theme-color" content="#0d9488">
-    <!-- Once the GitHub Pages URL is final, add absolute canonical + social image:
-    <link rel="canonical" href="https://YOUR-USER.github.io/YOUR-REPO/">
-    <meta property="og:url" content="https://YOUR-USER.github.io/YOUR-REPO/">
-    <meta property="og:image" content="https://YOUR-USER.github.io/YOUR-REPO/assets/figures/fig1-overview.png">
-    <meta name="twitter:image" content="https://YOUR-USER.github.io/YOUR-REPO/assets/figures/fig1-overview.png"> -->
+    <link rel="canonical" href="https://passionate11.github.io/ec2-bench-project-page/">
+    <meta property="og:url" content="https://passionate11.github.io/ec2-bench-project-page/">
+    <meta property="og:image" content="https://passionate11.github.io/ec2-bench-project-page/assets/figures/fig1-overview.png">
+    <meta name="twitter:image" content="https://passionate11.github.io/ec2-bench-project-page/assets/figures/fig1-overview.png">
     <title>EC²-Bench · Edge-Cloud Collaboration for Long-Horizon LLM Agents</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d9488'/%3E%3Ctext x='30' y='42' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='26' font-weight='700' fill='white'%3EEC%3Ctspan font-size='15' dy='-11'%3E2%3C/tspan%3E%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2">
+    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2b">
     <script>
       (function () {
         var saved = null;
@@ -166,9 +165,9 @@
             <article class="tldr-card">
               <span class="tldr-num">02</span>
               <h3 data-i18n="takeaways.c2h">Stronger edges converge on performance, not privacy</h3>
-              <p data-i18n="takeaways.c2p">The completion gap across strategies shrinks from <strong>25.22</strong> points
-              (2B) to <strong>3.67</strong> (Qwen3.7-Plus). Exposure stays spread out: at 27B, strategies differ by 4.60
-              points in completion but by <strong>35.93</strong> in privacy exposure.</p>
+              <p data-i18n="takeaways.c2p">The completion gap across strategies drops from <strong>25.22</strong> points
+              (2B) to under 5 for 27B (4.60) and Qwen3.7-Plus (<strong>4.76</strong>). Exposure stays spread out: at 27B,
+              strategies differ by 4.60 points in completion but by <strong>35.93</strong> in privacy exposure.</p>
             </article>
             <article class="tldr-card">
               <span class="tldr-num">03</span>
@@ -553,13 +552,13 @@
             <div class="fig-pair-group">
               <figure class="fig-pair">
                 <div class="fig-pair-imgs">
-                  <img src="assets/figures/fig3a-completion.png" width="1000" height="756" loading="lazy" decoding="async" alt="Task completion across edge models 2B, 9B, 27B and Plus: mean of collaboration configurations rises toward cloud-only and the range across strategies shrinks from 25.22 to 3.67 points.">
-                  <img src="assets/figures/fig3b-exposure.png" width="1000" height="770" loading="lazy" decoding="async" alt="Privacy exposure across edge models: the range across collaboration strategies stays wide, between 32.87 and 56.23 points.">
+                  <img src="assets/figures/fig3a-completion-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Task completion across edge models 2B, 9B, 27B and Plus: the mean of collaboration configurations rises toward cloud-only, and the range across strategies drops from 25.22 points (2B) to 4.60 (27B) and 4.76 (Plus).">
+                  <img src="assets/figures/fig3b-exposure-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Privacy exposure across edge models: the range across collaboration strategies stays wide, between 32.87 and 66.23 points.">
                 </div>
                 <figcaption data-i18n="find.fig3cap">
                   <strong>RQ2: performance converges, privacy does not.</strong> Mean (dot) and range (bar) across collaboration
-                  strategies for each edge model. (a) The completion range narrows as the edge gets stronger. (b) The
-                  privacy-exposure range stays wide.
+                  strategies for each edge model. (a) The completion range narrows from 25.22 points (2B) to under 5 for 27B
+                  and Qwen3.7-Plus. (b) The privacy-exposure range stays wide, at 32.87 to 66.23 points.
                 </figcaption>
               </figure>
               <figure class="fig-pair">

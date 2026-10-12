@@ -677,6 +677,7 @@ footer { border-top: 1px solid var(--line); padding: 36px 0; background: var(--b
 .footer-brand { display: flex; align-items: center; gap: 12px; }
 .footer-brand strong { display: block; font-size: 14px; letter-spacing: .03em; color: var(--ink); }
 .footer-brand span { font-size: 13px; color: var(--muted); }
+.footer-brand .brand-mark { font-size: 16px; color: #fff; }
 .footer-links { display: flex; gap: 22px; }
 .footer-links a { font-size: 14px; color: var(--ink-soft); font-weight: 500; }
 .footer-links a:hover { color: var(--brand-deep); }
