@@ -10,7 +10,7 @@ const state = {
   plotEdge: "all"        // plot highlight: "all" | edge model name
 };
 
-const dataVersion = "20261012-ec2d";
+const dataVersion = "20261012-ec2h";
 
 /* ============================================================
    i18n — bilingual EN / 中文
@@ -445,15 +445,8 @@ function xValue(item) {
   return state.xAxis === "exposure" ? item.privacyExposure : item.cloudCost;
 }
 
-/* In cost mode, a secondary cloud-only baseline (e.g. DeepSeek-v4-Pro under the
-   DeepSeek-V4.1-Flash setting) can sit far right of everything else; keep it out of
-   the range and pin it to the right edge instead. */
-function inRange(item) {
-  return state.xAxis !== "cost" || item.group !== "Cloud-only" || item.cloudModel === SUITE_CLOUD[state.suite];
-}
-
 function plotRanges(rows) {
-  const xs = rows.filter(inRange).map(xValue);
+  const xs = rows.map(xValue);
   const ys = rows.map(r => r.completion);
   const xMaxRaw = state.xAxis === "exposure" ? 100 : Math.max(...xs);
   const xStep = niceStep(xMaxRaw, 5);
@@ -489,7 +482,7 @@ function renderTradeoff() {
   const plot = { x: margin.left, y: margin.top, w: W - margin.left - margin.right, h: H - margin.top - margin.bottom };
   const R = plotRanges(rows);
   const pos = item => ({
-    x: Math.min(plot.x + ((xValue(item) - R.xMin) / (R.xMax - R.xMin)) * plot.w, plot.x + plot.w - 10),
+    x: plot.x + ((xValue(item) - R.xMin) / (R.xMax - R.xMin)) * plot.w,
     y: plot.y + (1 - ((item.completion - R.yMin) / (R.yMax - R.yMin))) * plot.h
   });
 
@@ -653,9 +646,8 @@ function drawCloudLabels(ctx, points) {
   ctx.fillStyle = "rgba(60, 71, 66, 0.82)";
   points.filter(p => p.item.group === "Cloud-only").forEach(({ item, x, y, radius }) => {
     const right = x > (state.plotW || 800) * 0.8;
-    const label = inRange(item) ? item.cloudModel : `${item.cloudModel} (${format.money(item.cloudCost)}) →`;
     ctx.textAlign = right ? "right" : "left";
-    ctx.fillText(label, right ? x - radius - 10 : x + radius + 10, y);
+    ctx.fillText(item.cloudModel, right ? x - radius - 10 : x + radius + 10, y);
   });
   ctx.restore();
 }

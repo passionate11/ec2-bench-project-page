@@ -65,20 +65,6 @@
       "privacyExposure": 0.0
     },
     {
-      "suite": "both",
-      "method": "Cloud-only",
-      "model": "DeepSeek-v4-Pro",
-      "group": "Cloud-only",
-      "edgeModel": null,
-      "cloudModel": "DeepSeek-v4-Pro",
-      "completion": 72.9,
-      "pass3": 53.12,
-      "cloudTokens": "5.81 / 50.20 / 1.60",
-      "cloudCost": 16.41,
-      "edgeFlops": null,
-      "privacyExposure": 86.66
-    },
-    {
       "suite": "glm",
       "method": "Cloud-only",
       "model": "GLM-5.3",
