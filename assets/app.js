@@ -29,12 +29,13 @@ const I18N_ZH = {
   "nav.code": "代码",
 
   "hero.venue": "基准与实证研究 · 2026",
-  "hero.title": `赋能端侧智能体：大模型智能体执行中<br><span class="title-accent">端云协同</span>的系统性分析`,
+  "hero.titleMain": "赋能端侧智能体",
+  "hero.titleSub": `大模型智能体执行中<span class="title-accent">端云协同</span>的系统性分析`,
+  "hero.tagline": "128 个可执行任务 · 4 种协同策略 · 任务表现、资源用量与隐私暴露",
   "hero.btnCode": "代码与数据",
   "hero.btnPaper": "论文 (PDF)",
   "hero.btnResults": "主实验结果",
   "hero.btnBibtex": "BibTeX",
-  "hero.thesis": `当大模型智能体在本地工作区执行长程任务时，云端协助不再是一次性的路由决策，而是穿插在整条执行轨迹之中。<strong class="nowrap">EC²-Bench</strong> 在 128 个可执行任务上，从任务表现、资源用量与隐私暴露三个维度评估四种端云协同策略。`,
   "hero.caption": `<strong>总览。</strong>一个代表性的长程工作流，端侧与云端智能体在同一条轨迹上交替参与；我们研究的四种协同策略，区别在于<em>由谁</em>决定云端何时加入、以及云端被调用后<em>做什么</em>；以及三个研究问题。`,
 
   "takeaways.kicker": "要点",

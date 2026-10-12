@@ -192,14 +192,16 @@ p { margin: 0; }
   color: var(--brand-deep); margin-bottom: 18px;
 }
 .hero-title {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: clamp(24px, 3.4vw, 34px);
-  line-height: 1.2;
-  letter-spacing: -0.012em;
-  margin: 0 auto 26px;
-  max-width: 940px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  max-width: 900px; margin: 0 auto 30px;
+  font-family: var(--serif); font-weight: 600; letter-spacing: -0.012em;
 }
+.title-main { font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -0.015em; }
+.title-sub {
+  font-size: clamp(18px, 2.1vw, 23px); line-height: 1.45; font-weight: 500;
+  color: var(--ink-soft); text-wrap: balance;
+}
+.hero-tagline { font-size: 14.5px; color: var(--muted); margin: -12px 0 28px; text-wrap: balance; }
 .title-accent {
   color: var(--brand-deep);
   font-style: italic;
@@ -220,7 +222,6 @@ p { margin: 0; }
 .affil-list sup { color: var(--brand-deep); }
 .corr-note { font-size: 13px; color: var(--muted); margin: 0; }
 .corr-note span { color: var(--brand-deep); }
-.hero-title { margin-bottom: 30px; }
 
 /* Authors (bottom of the page) */
 .authors-block {
@@ -253,25 +254,15 @@ p { margin: 0; }
 }
 .btn-primary:hover { color: #fff; background: #0b1311; }
 
-.hero-thesis {
-  max-width: 760px; margin: 0 auto;
-  text-align: center;
-  font-size: 17.5px; line-height: 1.7; color: var(--ink-soft);
-}
-.hero-thesis strong { color: var(--ink); font-weight: 650; }
-.nowrap { white-space: nowrap; }
-
 /* Chinese: CJK has no true italic and the serif falls back to Songti, so use the sans stack. */
-html[data-lang="zh"] .hero-title {
-  font-family: var(--sans); font-weight: 700; font-size: clamp(24px, 3vw, 31px);
-  line-height: 1.4; letter-spacing: .02em;
-}
+html[data-lang="zh"] .hero-title { font-family: var(--sans); }
+html[data-lang="zh"] .title-main { font-size: clamp(30px, 4.4vw, 46px); font-weight: 800; letter-spacing: .06em; }
+html[data-lang="zh"] .title-sub { font-size: clamp(17px, 2vw, 21px); font-weight: 500; letter-spacing: .04em; }
 html[data-lang="zh"] .title-accent { font-style: normal; }
 html[data-lang="zh"] .section-head h2 {
   font-family: var(--sans); font-weight: 700; font-size: clamp(22px, 2.8vw, 28px); letter-spacing: .01em;
 }
 html[data-lang="zh"] .hero-venue, html[data-lang="zh"] .kicker { letter-spacing: .08em; }
-html[data-lang="zh"] .hero-thesis { font-size: 17px; line-height: 1.8; }
 
 /* Hero figure */
 .hero-figure {

@@ -7,7 +7,7 @@ Live at **https://passionate11.github.io/ec2-bench-project-page/**.
 
 The page is a single static `index.html` that tells the paper's story top to bottom:
 
-1. **Hero** — title, action buttons, a short thesis, and the overview figure (Figure 1).
+1. **Hero** — title (main + subtitle), a one-line tagline, action buttons, and the overview figure (Figure 1).
 2. **Takeaways** — four key findings.
 3. **Motivation** — why one-shot query routing is not enough for long-horizon agents.
 4. **Benchmark** — what EC²-Bench is, the comparison with prior benchmarks (Table 1),
