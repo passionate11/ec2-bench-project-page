@@ -25,7 +25,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2g">
+    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2j">
     <script>
       (function () {
         var saved = null;
@@ -71,8 +71,8 @@
         </a>
         <nav class="nav-links" aria-label="Primary navigation">
           <a href="#problem" data-i18n="nav.problem">Motivation</a>
-          <a href="#benchmark" data-i18n="nav.benchmark">Benchmark</a>
           <a href="#strategies" data-i18n="nav.strategies">Strategies</a>
+          <a href="#benchmark" data-i18n="nav.benchmark">Benchmark</a>
           <a href="#results" data-i18n="nav.results">Results</a>
           <a href="#findings" data-i18n="nav.findings">Findings</a>
         </nav>
@@ -116,6 +116,7 @@
             <li class="hstat"><svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg><strong id="privacy-task-count">100</strong><span data-i18n="hero.s2">privacy-annotated tasks</span></li>
             <li class="hstat"><svg class="ic" aria-hidden="true"><use href="#ic-tag"/></svg><strong id="unit-count">3,385</strong><span data-i18n="hero.s3">sensitivity units</span></li>
             <li class="hstat"><svg class="ic" aria-hidden="true"><use href="#ic-route"/></svg><strong id="strategy-count">4</strong><span data-i18n="hero.s4">collaboration strategies</span></li>
+            <li class="hero-note" data-i18n="hero.note">Edge models: Qwen3.5-2B / 9B / 27B, Qwen3.7-Plus · Cloud model: GLM-5.3 · Agent harness: OpenClaw</li>
           </ul>
         </div>
 
@@ -140,9 +141,9 @@
             <article class="tldr-card">
               <span class="tldr-num">01</span>
               <h3 data-i18n="takeaways.c1h">Collaboration pays off for long-horizon agents</h3>
-              <p data-i18n="takeaways.c1p">Partial cloud participation recovers much of the capability gap. With Qwen3.5-2B,
-              Per-step Routing lifts completion from <strong>12.75 to 39.97</strong> at only <strong>22.7%</strong> of
-              cloud-only cost, and many configurations beat a linear edge-to-cloud interpolation.</p>
+              <p data-i18n="takeaways.c1p">Bringing in the cloud only part of the time recovers substantial capability at a
+              fraction of the cost: with Qwen3.5-2B, Per-step Routing lifts completion from <strong>12.75 to 39.97</strong>
+              using only <strong>22.7%</strong> of the cloud-only cost.</p>
             </article>
             <article class="tldr-card">
               <span class="tldr-num">02</span>
@@ -154,9 +155,10 @@
             <article class="tldr-card">
               <span class="tldr-num">03</span>
               <h3 data-i18n="takeaways.c3h">The best collaboration mode shifts</h3>
-              <p data-i18n="takeaways.c3p">Weak edges do best with external routing and direct cloud execution (2B:
-              Per-step Routing <strong>39.97</strong> vs. Edge-Ctrl. Delegation 15.86). Stronger edges flip toward
-              edge-controlled invocation and cloud <strong>advisory</strong> (Qwen3.7-Plus: <strong>76.84</strong>).</p>
+              <p data-i18n="takeaways.c3p">Weak edges do best when a <strong>router</strong> hands steps to the cloud to
+              execute (2B: Per-step Routing 39.97 vs. Edge-Ctrl. Delegation 15.86). Stronger edges do best when they call the
+              cloud <strong>themselves</strong> and only take its <strong>advice</strong> (Qwen3.7-Plus: Edge-Ctrl. Advisory
+              76.84).</p>
             </article>
             <article class="tldr-card">
               <span class="tldr-num">04</span>
@@ -209,45 +211,116 @@
               <div class="stat-row"><span class="stat-pill neutral" data-i18n="problem.c3pill">trajectory-level evaluation needed</span></div>
             </article>
           </div>
+
+          <div class="rq-strip">
+            <h3 class="rq-strip-title" data-i18n="problem.rqH">We ask three research questions</h3>
+            <ol class="rq-items">
+              <li><span class="rq-badge">RQ1</span><p data-i18n="problem.rq1">Does edge–cloud collaboration remain effective for realistic long-horizon agent execution?</p></li>
+              <li><span class="rq-badge">RQ2</span><p data-i18n="problem.rq2">How does increasing edge capability impact edge–cloud collaborative execution?</p></li>
+              <li><span class="rq-badge">RQ3</span><p data-i18n="problem.rq3">How should edge–cloud collaboration evolve as edge capability advances?</p></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ STRATEGIES ============================ -->
+      <section id="strategies" class="section">
+        <div class="content-shell">
+          <div class="section-head">
+            <span class="kicker" data-i18n="strat.kicker">Collaboration Strategies</span>
+            <h2 data-i18n="strat.h2">Four ways to bring the cloud into an agent trajectory.</h2>
+            <p class="section-lede" data-i18n="strat.lede">
+              Two single-side baselines plus four representative collaboration strategies. They differ along two axes:
+              <strong>who decides</strong> when the cloud participates (an external router or the edge agent itself),
+              and <strong>what the cloud does</strong> once invoked (generate the action, or advise the edge).
+            </p>
+          </div>
+
+          <div class="strategy-columns">
+            <div class="strategy-col">
+              <h3 class="col-title" data-i18n="strat.col1">Single-side baselines</h3>
+              <div class="strategy-stack">
+                <article class="strategy-card">
+                  <span class="strat-kicker edge"><svg class="ic" aria-hidden="true"><use href="#ic-device"/></svg><span data-i18n="strat.s1tag">Edge-only</span></span>
+                  <div class="mini mini-edge" aria-hidden="true">
+                    <span class="m-node m-edge">Edge</span>
+                    <span class="m-step">S1</span><span class="m-step">S2</span><span class="m-step">S3</span>
+                  </div>
+                  <p data-i18n="strat.s1p">Every action is generated by the edge model. No exposure; capability bounded by the on-device model.</p>
+                </article>
+                <article class="strategy-card">
+                  <span class="strat-kicker cloud"><svg class="ic" aria-hidden="true"><use href="#ic-cloud"/></svg><span data-i18n="strat.s2tag">Cloud-only</span></span>
+                  <div class="mini mini-cloud" aria-hidden="true">
+                    <span class="m-node m-cloud">Cloud</span>
+                    <span class="m-step c">S1</span><span class="m-step c">S2</span><span class="m-step c">S3</span>
+                  </div>
+                  <p data-i18n="strat.s2p">Every action is generated by the cloud model. The capability reference point, and the cost / exposure ceiling.</p>
+                </article>
+              </div>
+            </div>
+
+            <div class="strategy-col">
+              <h3 class="col-title" data-i18n="strat.col2">Externally routed <small>a router decides</small></h3>
+              <div class="strategy-stack">
+                <article class="strategy-card hybrid">
+                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-route"/></svg><span data-i18n="strat.s3tag">Query Routing</span></span>
+                  <div class="mini mini-route" aria-hidden="true">
+                    <span class="m-node m-router">Router</span><span class="m-branch"></span>
+                    <span class="m-node m-edge">All on edge</span><span class="m-node m-cloud">All on cloud</span>
+                  </div>
+                  <div class="role-row"><span class="role-chip" data-i18n="strat.s3when">once, before execution</span><span class="role-chip exec" data-i18n="strat.roleExec">cloud executes</span></div>
+                  <p data-i18n="strat.s3p">A RouteLLM matrix-factorization router reads the task instruction once and sends the whole trajectory to either the edge or the cloud.</p>
+                </article>
+                <article class="strategy-card hybrid">
+                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-spark"/></svg><span data-i18n="strat.s4tag">Per-step Routing</span></span>
+                  <div class="mini mini-step" aria-hidden="true">
+                    <span class="m-step">S1</span><span class="m-step">S2</span><span class="m-step c">S3</span><span class="m-step">S4</span><span class="m-step c">S5</span>
+                  </div>
+                  <div class="role-row"><span class="role-chip" data-i18n="strat.s4when">at every step</span><span class="role-chip exec" data-i18n="strat.roleExec">cloud executes</span></div>
+                  <p data-i18n="strat.s4p">Before every step, the edge model's next-token entropy (GlimpRouter-style) decides whether that step is generated by the edge or the cloud.</p>
+                </article>
+              </div>
+            </div>
+
+            <div class="strategy-col">
+              <h3 class="col-title" data-i18n="strat.col3">Edge-controlled <small>the edge agent decides</small></h3>
+              <div class="strategy-stack">
+                <article class="strategy-card hybrid">
+                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-layers"/></svg><span data-i18n="strat.s5tag">Edge-Ctrl. Cloud Delegation</span></span>
+                  <div class="mini mini-assist" aria-hidden="true">
+                    <span class="m-node m-edge">Edge</span><span class="m-arrow"></span><span class="m-node m-cloud">Cloud acts</span><span class="m-arrow"></span><span class="m-node m-edge">Edge</span>
+                  </div>
+                  <div class="role-row"><span class="role-chip" data-i18n="strat.s5when">when the edge asks</span><span class="role-chip exec" data-i18n="strat.roleExec">cloud executes</span></div>
+                  <p data-i18n="strat.s5p">Execution stays on the edge. Through a delegation tool, the edge agent hands the current step to the cloud, which generates the next action before control returns.</p>
+                </article>
+                <article class="strategy-card hybrid">
+                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-loop"/></svg><span data-i18n="strat.s6tag">Edge-Ctrl. Cloud Advisory</span></span>
+                  <div class="mini mini-assist" aria-hidden="true">
+                    <span class="m-node m-edge">Edge</span><span class="m-assist">? &rarr;</span><span class="m-node m-cloud">Advice</span><span class="m-arrow"></span><span class="m-node m-edge">Edge acts</span>
+                  </div>
+                  <div class="role-row"><span class="role-chip" data-i18n="strat.s6when">when the edge asks</span><span class="role-chip adv" data-i18n="strat.roleAdv">cloud advises</span></div>
+                  <p data-i18n="strat.s6p">Execution stays on the edge. The agent asks the cloud for plans, suggestions, or corrections, then generates the action itself.</p>
+                </article>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- ============================ BENCHMARK ============================ -->
-      <section id="benchmark" class="section">
+      <section id="benchmark" class="section section-soft">
         <div class="content-shell">
           <div class="section-head">
             <span class="kicker" data-i18n="bench.kicker">Benchmark</span>
             <h2 data-i18n="bench.h2">EC²-Bench: edge–cloud collaboration, evaluated over the whole trajectory.</h2>
             <p class="section-lede" data-i18n="bench.lede">
               <strong>E</strong>dge–<strong>C</strong>loud <strong>C</strong>ollaborative Agent Benchmark. 128 executable
-              digital-workspace tasks curated from six agent benchmarks, adapted to one OpenClaw runtime, and filtered so
-              that edge-only, cloud-only, and collaborative execution can actually differ. 100 tasks carry fine-grained
-              sensitivity annotations, so every context the cloud sees along a trajectory can be audited.
+              digital-workspace tasks, adapted from six agent benchmarks plus 7 newly built ones, run in one OpenClaw
+              runtime, and filtered so that edge-only, cloud-only, and collaborative execution can actually differ. Every run
+              records what the cloud saw at each step; 100 tasks carry fine-grained sensitivity annotations, so that
+              exposure can be audited.
             </p>
           </div>
-
-          <div class="table-shell compare-shell">
-            <table class="compare-table">
-              <thead>
-                <tr>
-                  <th data-i18n="bench.tBench">Benchmark</th>
-                  <th data-i18n="bench.tScenario">Evaluation scenario</th>
-                  <th data-i18n="bench.tModes">Collab. modes</th>
-                  <th data-i18n="bench.tDims">Evaluation dimensions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>RouterBench</td><td data-i18n="bench.r1s">General LLM tasks</td><td>R<sub>q</sub></td><td data-i18n="bench.r1d">Task perf. / Cost</td></tr>
-                <tr><td>LLMRouterBench</td><td data-i18n="bench.r2s">General LLM &amp; tool-use tasks</td><td>R<sub>q</sub></td><td data-i18n="bench.r2d">Task perf. / Cost</td></tr>
-                <tr><td>LLMSwitchBench</td><td data-i18n="bench.r3s">Single-turn queries</td><td>R<sub>q</sub></td><td data-i18n="bench.r3d">Task perf. / Cost</td></tr>
-                <tr><td>M4A1</td><td data-i18n="bench.r4s">Multi-turn dialogue</td><td>R<sub>s</sub></td><td data-i18n="bench.r4d">Task perf. / Cost / Latency</td></tr>
-                <tr class="ours"><td><strong>EC²-Bench</strong></td><td data-i18n="bench.r5s"><strong>Long-horizon agent execution</strong></td><td><strong>R<sub>q</sub>, R<sub>s</sub>, D, A</strong></td><td data-i18n="bench.r5d"><strong>Task perf. / Resource / Privacy</strong></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="table-caption" data-i18n="bench.tCaption">
-            R<sub>q</sub> / R<sub>s</sub>: query-level / per-step routing; D / A: edge-controlled cloud delegation / advisory.
-          </p>
 
           <div class="axis-grid">
             <article class="axis-card utility">
@@ -295,86 +368,30 @@
               <li data-i18n="bench.srcCurated">Curated · 7</li>
             </ul>
           </div>
-        </div>
-      </section>
 
-      <!-- ============================ STRATEGIES ============================ -->
-      <section id="strategies" class="section section-soft">
-        <div class="content-shell">
-          <div class="section-head">
-            <span class="kicker" data-i18n="strat.kicker">Collaboration Strategies</span>
-            <h2 data-i18n="strat.h2">Four ways to bring the cloud into an agent trajectory.</h2>
-            <p class="section-lede" data-i18n="strat.lede">
-              Two single-side baselines plus four representative collaboration strategies. They differ along two axes:
-              <strong>who decides</strong> when the cloud participates (an external router or the edge agent itself),
-              and <strong>what the cloud does</strong> once invoked (generate the action, or advise the edge).
-            </p>
+          <h3 class="bench-sub" data-i18n="bench.cmpH">How EC²-Bench differs from prior benchmarks</h3>
+          <div class="table-shell compare-shell">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th data-i18n="bench.tBench">Benchmark</th>
+                  <th data-i18n="bench.tScenario">Evaluation scenario</th>
+                  <th data-i18n="bench.tModes">Collab. modes</th>
+                  <th data-i18n="bench.tDims">Evaluation dimensions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>RouterBench</td><td data-i18n="bench.r1s">General LLM tasks</td><td>R<sub>q</sub></td><td data-i18n="bench.r1d">Task perf. / Cost</td></tr>
+                <tr><td>LLMRouterBench</td><td data-i18n="bench.r2s">General LLM &amp; tool-use tasks</td><td>R<sub>q</sub></td><td data-i18n="bench.r2d">Task perf. / Cost</td></tr>
+                <tr><td>LLMSwitchBench</td><td data-i18n="bench.r3s">Single-turn queries</td><td>R<sub>q</sub></td><td data-i18n="bench.r3d">Task perf. / Cost</td></tr>
+                <tr><td>M4A1</td><td data-i18n="bench.r4s">Multi-turn dialogue</td><td>R<sub>s</sub></td><td data-i18n="bench.r4d">Task perf. / Cost / Latency</td></tr>
+                <tr class="ours"><td><strong>EC²-Bench</strong></td><td data-i18n="bench.r5s"><strong>Long-horizon agent execution</strong></td><td><strong>R<sub>q</sub>, R<sub>s</sub>, D, A</strong></td><td data-i18n="bench.r5d"><strong>Task perf. / Resource / Privacy</strong></td></tr>
+              </tbody>
+            </table>
           </div>
-
-          <div class="strategy-columns">
-            <div class="strategy-col">
-              <h3 class="col-title" data-i18n="strat.col1">Single-side baselines</h3>
-              <div class="strategy-stack">
-                <article class="strategy-card">
-                  <span class="strat-kicker edge"><svg class="ic" aria-hidden="true"><use href="#ic-device"/></svg><span data-i18n="strat.s1tag">Edge-only</span></span>
-                  <div class="mini mini-edge" aria-hidden="true">
-                    <span class="m-node m-edge">Edge</span>
-                    <span class="m-step">S1</span><span class="m-step">S2</span><span class="m-step">S3</span>
-                  </div>
-                  <p data-i18n="strat.s1p">Every action is generated by the edge model. No exposure; capability bounded by the on-device model.</p>
-                </article>
-                <article class="strategy-card">
-                  <span class="strat-kicker cloud"><svg class="ic" aria-hidden="true"><use href="#ic-cloud"/></svg><span data-i18n="strat.s2tag">Cloud-only</span></span>
-                  <div class="mini mini-cloud" aria-hidden="true">
-                    <span class="m-node m-cloud">Cloud</span>
-                    <span class="m-step c">S1</span><span class="m-step c">S2</span><span class="m-step c">S3</span>
-                  </div>
-                  <p data-i18n="strat.s2p">Every action is generated by the cloud model. The capability reference point, and the cost / exposure ceiling.</p>
-                </article>
-              </div>
-            </div>
-
-            <div class="strategy-col">
-              <h3 class="col-title" data-i18n="strat.col2">Externally routed <small>a router decides</small></h3>
-              <div class="strategy-stack">
-                <article class="strategy-card hybrid">
-                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-route"/></svg><span data-i18n="strat.s3tag">Query Routing</span></span>
-                  <div class="mini mini-route" aria-hidden="true">
-                    <span class="m-node m-router">Router</span><span class="m-branch"></span>
-                    <span class="m-node m-edge">All on edge</span><span class="m-node m-cloud">All on cloud</span>
-                  </div>
-                  <p data-i18n="strat.s3p">A RouteLLM matrix-factorization router reads the task instruction once and sends the whole trajectory to either the edge or the cloud.</p>
-                </article>
-                <article class="strategy-card hybrid">
-                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-spark"/></svg><span data-i18n="strat.s4tag">Per-step Routing</span></span>
-                  <div class="mini mini-step" aria-hidden="true">
-                    <span class="m-step">S1</span><span class="m-step">S2</span><span class="m-step c">S3</span><span class="m-step">S4</span><span class="m-step c">S5</span>
-                  </div>
-                  <p data-i18n="strat.s4p">Before every step, the edge model's next-token entropy (GlimpRouter-style) decides whether that step is generated by the edge or the cloud.</p>
-                </article>
-              </div>
-            </div>
-
-            <div class="strategy-col">
-              <h3 class="col-title" data-i18n="strat.col3">Edge-controlled <small>the edge agent decides</small></h3>
-              <div class="strategy-stack">
-                <article class="strategy-card hybrid">
-                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-layers"/></svg><span data-i18n="strat.s5tag">Edge-Ctrl. Cloud Delegation</span></span>
-                  <div class="mini mini-assist" aria-hidden="true">
-                    <span class="m-node m-edge">Edge</span><span class="m-arrow"></span><span class="m-node m-cloud">Cloud acts</span><span class="m-arrow"></span><span class="m-node m-edge">Edge</span>
-                  </div>
-                  <p data-i18n="strat.s5p">Execution stays on the edge. Through a delegation tool, the edge agent hands the current step to the cloud, which generates the next action before control returns.</p>
-                </article>
-                <article class="strategy-card hybrid">
-                  <span class="strat-kicker mix"><svg class="ic" aria-hidden="true"><use href="#ic-loop"/></svg><span data-i18n="strat.s6tag">Edge-Ctrl. Cloud Advisory</span></span>
-                  <div class="mini mini-assist" aria-hidden="true">
-                    <span class="m-node m-edge">Edge</span><span class="m-assist">? &rarr;</span><span class="m-node m-cloud">Advice</span><span class="m-arrow"></span><span class="m-node m-edge">Edge acts</span>
-                  </div>
-                  <p data-i18n="strat.s6p">Execution stays on the edge. The agent asks the cloud for plans, suggestions, or corrections, then generates the action itself.</p>
-                </article>
-              </div>
-            </div>
-          </div>
+          <p class="table-caption" data-i18n="bench.tCaption">
+            R<sub>q</sub> / R<sub>s</sub>: query-level / per-step routing; D / A: edge-controlled cloud delegation / advisory.
+          </p>
         </div>
       </section>
 
@@ -383,7 +400,7 @@
         <div class="content-shell">
           <div class="section-head">
             <span class="kicker" data-i18n="results.kicker">Main Results</span>
-            <h2 data-i18n="results.h2">Task performance, resource usage, and privacy exposure on EC²-Bench.</h2>
+            <h2 data-i18n="results.h2">Main results across all configurations.</h2>
           </div>
           <figure class="wide-figure results-figure">
             <img src="assets/figures/table2-main-results.png" width="1400" height="1040" loading="lazy" decoding="async" alt="Paper Table 2: completion, Pass³, cloud tokens, cloud cost, edge FLOPs, and privacy exposure for edge-only (Qwen3.5-2B/9B/27B, Qwen3.7-Plus), cloud-only (DeepSeek-v4-Pro, GLM-5.3), and the four collaboration strategies under each edge model, with GLM-5.3 as the cloud model.">
@@ -402,93 +419,81 @@
         <div class="content-shell">
           <div class="section-head">
             <span class="kicker" data-i18n="find.kicker">Key Findings</span>
-            <h2 data-i18n="find.h2">Three research questions, one shared space.</h2>
+            <h2 data-i18n="find.h2">Three research questions, answered.</h2>
             <p class="section-lede" data-i18n="find.lede">
-              Every configuration sits in the same plot. <strong>Up</strong> means higher completion; switch the x-axis
-              between cloud cost and privacy exposure (for both, <strong>left</strong> is better). Dashed lines join each
-              edge model's edge-only point to cloud-only, so points above a line beat a proportional mix of the two extremes.
+              Each research question is answered with the corresponding figure from the paper.
             </p>
           </div>
 
-          <div class="findings-layout">
-            <div class="plot-card">
-              <div class="plot-controls">
-                <div class="leaderboard-tabs plot-tabs" id="plot-x-tabs" aria-label="X axis">
-                  <button class="active" type="button" data-x="cost" aria-pressed="true">
-                    <svg class="ic" aria-hidden="true"><use href="#ic-coin"/></svg><span data-i18n="find.xCost">Cloud cost</span>
-                  </button>
-                  <button type="button" data-x="exposure" aria-pressed="false">
-                    <svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg><span data-i18n="find.xExposure">Privacy exposure</span>
-                  </button>
-                </div>
-                <div class="leaderboard-tabs plot-tabs" id="plot-edge-tabs" aria-label="Highlight edge model">
-                  <button class="active" type="button" data-edge="all" aria-pressed="true"><span data-i18n="find.edgeAll">All edges</span></button>
-                  <button type="button" data-edge="Qwen3.5-2B" aria-pressed="false">2B</button>
-                  <button type="button" data-edge="Qwen3.5-9B" aria-pressed="false">9B</button>
-                  <button type="button" data-edge="Qwen3.5-27B" aria-pressed="false">27B</button>
-                  <button type="button" data-edge="Qwen3.7-Plus" aria-pressed="false">Plus</button>
-                </div>
-                <div class="leaderboard-tabs plot-tabs" id="plot-suite-tabs" aria-label="Cloud model">
-                  <button class="active" type="button" data-suite="glm" aria-pressed="true">GLM-5.3</button>
-                  <button type="button" data-suite="dsflash" aria-pressed="false">DS-V4.1-Flash</button>
-                </div>
-              </div>
-              <canvas id="tradeoff-canvas" width="960" height="620" aria-label="Completion versus cloud cost or privacy exposure for every edge-only, cloud-only, and edge-cloud configuration."></canvas>
-              <noscript>
-                <img src="assets/figures/fig2a-cost.png" style="width:100%;max-width:520px;height:auto;border-radius:8px" alt="Cost–performance trade-off for Qwen3.5-2B and Qwen3.5-9B: several collaboration configurations lie above the dashed line interpolating edge-only and cloud-only.">
-              </noscript>
-              <div id="plot-tooltip" role="status" aria-live="polite"></div>
-            </div>
-
-            <ol class="finding-list">
-              <li class="finding">
+          <div class="rq-rows">
+            <article class="rq-row">
+              <div class="rq-text">
                 <span class="finding-tag" data-i18n="find.f1tag">RQ1 · Effectiveness</span>
-                <h3 data-i18n="find.f1h">Collaboration sits between, and often above, the extremes.</h3>
-                <p data-i18n="find.f1p">Collaborative runs improve completion over edge-only while cutting cloud
-                dependence relative to cloud-only. Multiple configurations lie above the edge-to-cloud interpolation in both
-                cost–performance and privacy–performance space.</p>
-              </li>
-              <li class="finding">
+                <p class="rq-q" data-i18n="find.f1q">Does edge–cloud collaboration remain effective for long-horizon agent execution?</p>
+                <h3 data-i18n="find.f1h">Yes. Collaboration sits between the two extremes, and often above them.</h3>
+                <p data-i18n="find.f1p">Cloud-only execution performs best but has the highest cloud cost and exposure;
+                edge-only avoids both but loses performance. Collaboration fills the space in between: with Qwen3.5-2B,
+                Per-step Routing lifts completion from 12.75 to 39.97 at 22.7% of cloud-only cost. Several configurations
+                lie above the dashed line joining edge-only and cloud-only, so they beat a proportional mix of the two.</p>
+              </div>
+                  <figure class="fig-pair">
+                    <div class="fig-pair-imgs">
+                      <img src="assets/figures/fig2a-cost-v2.png" width="1000" height="909" loading="lazy" decoding="async" alt="Cloud cost versus completion for Qwen3.5-2B and Qwen3.5-9B with GLM-5.3: several collaboration points lie above the dashed line from edge-only to cloud-only.">
+                      <img src="assets/figures/fig2b-privacy-v2.png" width="1000" height="909" loading="lazy" decoding="async" alt="Privacy exposure versus completion for Qwen3.5-2B and Qwen3.5-9B with GLM-5.3.">
+                    </div>
+                    <figcaption data-i18n="find.fig2cap">
+                      <strong>Figure 2.</strong> Qwen3.5-2B (green) and Qwen3.5-9B (blue) with GLM-5.3 as the cloud model:
+                      (a) cloud cost vs. completion, (b) privacy exposure vs. completion. Squares: edge-only; circles: the four
+                      collaboration strategies; star: cloud-only. Upper-left is better.
+                    </figcaption>
+                  </figure>
+            </article>
+            <article class="rq-row">
+              <div class="rq-text">
                 <span class="finding-tag" data-i18n="find.f2tag">RQ2 · Edge capability</span>
+                <p class="rq-q" data-i18n="find.f2q">How does increasing edge capability impact collaborative execution?</p>
                 <h3 data-i18n="find.f2h">Stronger edges close the performance gap, not the privacy gap.</h3>
                 <p data-i18n="find.f2p">The best collaborative configuration climbs from <strong>39.97</strong> (2B) to
-                <strong>76.84</strong> (Qwen3.7-Plus), approaching cloud-only's 82.70. Strategies converge on completion,
-                but privacy exposure stays strongly strategy-dependent.</p>
-              </li>
-              <li class="finding">
+                <strong>76.84</strong> (Qwen3.7-Plus), approaching cloud-only's 82.70, and the completion spread across
+                strategies falls from 25.22 points to under 5. Privacy exposure stays spread out: at 27B, strategies differ
+                by 4.60 points in completion but by 35.93 in exposure.</p>
+              </div>
+                  <figure class="fig-pair">
+                    <div class="fig-pair-imgs">
+                      <img src="assets/figures/fig3a-completion-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Task completion across edge models 2B, 9B, 27B and Plus: the mean of collaboration configurations rises toward cloud-only, and the range across strategies drops from 25.22 points (2B) to 4.60 (27B) and 4.76 (Plus).">
+                      <img src="assets/figures/fig3b-exposure-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Privacy exposure across edge models: the range across collaboration strategies stays wide, between 32.87 and 66.23 points.">
+                    </div>
+                    <figcaption data-i18n="find.fig3cap">
+                      <strong>Figure 3.</strong> Mean (dot) and range (bar) across collaboration
+                      strategies for each edge model. (a) The completion range narrows from 25.22 points (2B) to under 5 for 27B
+                      and Qwen3.7-Plus. (b) The privacy-exposure range stays wide, at 32.87 to 66.23 points.
+                    </figcaption>
+                  </figure>
+            </article>
+            <article class="rq-row">
+              <div class="rq-text">
                 <span class="finding-tag" data-i18n="find.f3tag">RQ3 · Collaboration shift</span>
-                <h3 data-i18n="find.f3h">From router-controlled execution to edge-led advice.</h3>
-                <p data-i18n="find.f3p">With weak edges, external routing and direct cloud execution win. As edge
-                capability grows the ordering reverses, favoring edge-controlled invocation and a cloud that
-                <em>advises</em> rather than <em>acts</em>.</p>
-              </li>
-            </ol>
-
-            <div class="fig-pair-group">
-              <figure class="fig-pair">
-                <div class="fig-pair-imgs">
-                  <img src="assets/figures/fig3a-completion-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Task completion across edge models 2B, 9B, 27B and Plus: the mean of collaboration configurations rises toward cloud-only, and the range across strategies drops from 25.22 points (2B) to 4.60 (27B) and 4.76 (Plus).">
-                  <img src="assets/figures/fig3b-exposure-v2.png" width="1000" height="750" loading="lazy" decoding="async" alt="Privacy exposure across edge models: the range across collaboration strategies stays wide, between 32.87 and 66.23 points.">
-                </div>
-                <figcaption data-i18n="find.fig3cap">
-                  <strong>RQ2: performance converges, privacy does not.</strong> Mean (dot) and range (bar) across collaboration
-                  strategies for each edge model. (a) The completion range narrows from 25.22 points (2B) to under 5 for 27B
-                  and Qwen3.7-Plus. (b) The privacy-exposure range stays wide, at 32.87 to 66.23 points.
-                </figcaption>
-              </figure>
-              <figure class="fig-pair">
-                <div class="fig-pair-imgs">
-                  <img src="assets/figures/fig4a-invocation.png" width="1000" height="890" loading="lazy" decoding="async" alt="Edge-controlled delegation versus a matched random-invocation baseline: gains of +1.2 for 2B and +3.0 to +4.4 for stronger edge models.">
-                  <img src="assets/figures/fig4b-guidance.png" width="1000" height="890" loading="lazy" decoding="async" alt="Qwen3.5-2B completion under fixed cloud advisory during instruction-following training rises from 24.8 to 28.8 over 600 steps.">
-                </div>
-                <figcaption data-i18n="find.fig4cap">
-                  <strong>RQ3: the edge-side abilities behind the shift.</strong> (a) Edge-controlled delegation vs. a random
-                  baseline with the same cloud-call rate: +1.2 for 2B, +3.0 to +4.4 for stronger edges. (b) Under fixed cloud
-                  advisory, instruction-following RL on Qwen3.5-2B raises completion from 24.8 to 28.8 while edge-only
-                  performance stays flat.
-                </figcaption>
-              </figure>
-            </div>
+                <p class="rq-q" data-i18n="find.f3q">How should edge–cloud collaboration evolve as edge capability advances?</p>
+                <h3 data-i18n="find.f3h">From router-controlled cloud execution to edge-controlled cloud advice.</h3>
+                <p data-i18n="find.f3p">With Qwen3.5-2B, externally routed strategies win (Per-step Routing 39.97 vs.
+                Edge-Ctrl. Delegation 15.86), and a cloud that <em>executes</em> beats one that <em>advises</em>. As edge
+                capability grows, both orderings reverse: from 9B upward, Edge-Ctrl. Advisory is best, reaching 76.84 with
+                Qwen3.7-Plus. Two edge-side abilities stand behind the shift: deciding <strong>when</strong> to call the
+                cloud, and <strong>following</strong> its guidance.</p>
+              </div>
+                  <figure class="fig-pair">
+                    <div class="fig-pair-imgs">
+                      <img src="assets/figures/fig4a-invocation.png" width="1000" height="890" loading="lazy" decoding="async" alt="Edge-controlled delegation versus a matched random-invocation baseline: gains of +1.2 for 2B and +3.0 to +4.4 for stronger edge models.">
+                      <img src="assets/figures/fig4b-guidance.png" width="1000" height="890" loading="lazy" decoding="async" alt="Qwen3.5-2B completion under fixed cloud advisory during instruction-following training rises from 24.8 to 28.8 over 600 steps.">
+                    </div>
+                    <figcaption data-i18n="find.fig4cap">
+                      <strong>Figure 4.</strong> (a) Edge-controlled delegation vs. a random
+                      baseline with the same cloud-call rate: +1.2 for 2B, +3.0 to +4.4 for stronger edges. (b) Under fixed cloud
+                      advisory, instruction-following RL on Qwen3.5-2B raises completion from 24.8 to 28.8 while edge-only
+                      performance stays flat.
+                    </figcaption>
+                  </figure>
+            </article>
           </div>
 
           <p class="findings-footnote" data-i18n="find.footnote">
@@ -581,8 +586,8 @@
         </div>
         <nav class="footer-links" aria-label="Footer">
           <a href="#problem" data-i18n="nav.problem">Motivation</a>
-          <a href="#benchmark" data-i18n="nav.benchmark">Benchmark</a>
           <a href="#strategies" data-i18n="nav.strategies">Strategies</a>
+          <a href="#benchmark" data-i18n="nav.benchmark">Benchmark</a>
           <a href="#results" data-i18n="nav.results">Results</a>
           <a href="#findings" data-i18n="nav.findings">Findings</a>
           <a href="https://github.com/OpenBMB/EC2-Bench" target="_blank" rel="noopener">GitHub</a>
@@ -590,6 +595,6 @@
       </div>
     </footer>
 
-    <script src="assets/app.js?v=20261012-ec2h"></script>
+    <script src="assets/app.js?v=20261012-ec2i"></script>
   </body>
 </html>

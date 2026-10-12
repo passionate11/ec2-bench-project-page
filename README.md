@@ -5,19 +5,20 @@ Edge-Cloud Collaboration in LLM Agent Execution”** (EC²-Bench).
 
 Live at **https://passionate11.github.io/ec2-bench-project-page/**.
 
-The page is a single static `index.html` that tells the paper's story top to bottom:
+The page is a single static `index.html` that follows the paper's order:
 
-1. **Hero** — title (main + subtitle), a one-line tagline, action buttons, and the overview figure (Figure 1).
-2. **Takeaways** — four key findings.
-3. **Motivation** — why one-shot query routing is not enough for long-horizon agents.
-4. **Benchmark** — what EC²-Bench is, the comparison with prior benchmarks (Table 1),
-   the three evaluation axes, task categories and sources.
-5. **Strategies** — the two baselines and four collaboration strategies, grouped by
-   *who decides* when the cloud participates.
-6. **Main Results** — a screenshot of the paper's Table 2.
-7. **Findings** — an interactive completion vs. cost / privacy-exposure plot, the three
-   RQ findings, and Figures 3–4 from the paper.
-8. **Resources & Citation**, then **Authors** at the bottom.
+1. **Hero** — title, one-paragraph summary, buttons, benchmark-at-a-glance numbers, and the
+   overview figure (Figure 1).
+2. **Takeaways** — four headline findings in plain language.
+3. **Motivation** — edge-only vs. cloud-only vs. what prior benchmarks missed, followed by
+   the three research questions.
+4. **Strategies** — the two baselines and four collaboration strategies, grouped by *who
+   decides* (router vs. edge agent), each tagged with when the cloud joins and what it does.
+5. **Benchmark** — what EC²-Bench is, the three evaluation dimensions, task categories and
+   sources, and the comparison with prior benchmarks (paper Table 1).
+6. **Main Results** — a screenshot of paper Table 2.
+7. **Findings** — RQ1–RQ3, each next to its paper figure (Figures 2–4).
+8. **Resources & Citation**, then **Authors**.
 
 ## Local preview
 
@@ -30,20 +31,14 @@ python3 -m http.server 8080
 
 - **Main results** — `assets/figures/table2-main-results.png` is cropped from the paper PDF
   (`tools/crop_table.py` in the build folder); re-crop it whenever Table 2 changes.
-- **Trade-off plot** — driven by `data/results.json`. Each row has a `suite` (`glm` = paper
-  Table 2, `dsflash` = Table 11, `both` = shared rows such as edge-only).
-  `privacyExposure` is the share of sensitive units exposed to the cloud (**lower is better**).
-  Axis ranges update automatically.
-- **Figures** — `assets/figures/` holds PNGs rendered from the paper's figure PDFs:
-  `fig1-overview.png` (Figure 1), `fig2a-cost.png` (Figure 2a, no-JS fallback),
-  `fig3a/b-*-v2.png` (Figure 3, redrawn from the Table 2 numbers), `fig4a/b-*.png` (Figure 4).
-- **Copy / narrative** — edit `index.html` sections directly. Every translatable node has
-  a `data-i18n` key; its Chinese text lives in `I18N_ZH` in `assets/app.js` — update both.
+- **Figures 2 and 3** — `assets/figures/fig2*-v2.png` and `fig3*-v2.png` are redrawn from the
+  Table 2 numbers (`tools/build.sh` in the build folder regenerates them). Figures 1 and 4
+  are rendered from the paper's figure PDFs.
+- **Copy / narrative** — edit `index.html` directly. Every translatable node has a
+  `data-i18n` key; its Chinese text lives in `I18N_ZH` in `assets/app.js` — update both.
 - **Design tokens** — colors, spacing, and fonts live in the `:root` block of
-  `assets/styles.css`. The three axes are color-coded consistently
-  (performance = green, resource = amber, privacy = indigo).
-- **Cache busting** — after editing CSS / JS / data, bump the `?v=` query strings in
-  `index.html` and `dataVersion` in `assets/app.js`.
+  `assets/styles.css`.
+- **Cache busting** — after editing CSS / JS, bump the `?v=` query strings in `index.html`.
 
 ## Notes before publishing
 
