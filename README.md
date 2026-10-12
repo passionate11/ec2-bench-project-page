@@ -23,7 +23,7 @@ The page is a single static `index.html` that tells the paper's story top to bot
 
 ```bash
 python3 -m http.server 8080
-# open http://localhost:8080          (append ?lang=en or ?lang=zh to force a language)
+# open http://localhost:8080          (English by default; append ?lang=zh for Chinese)
 ```
 
 ## Editing content

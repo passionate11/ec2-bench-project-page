@@ -31,7 +31,7 @@
         var saved = null;
         try { saved = localStorage.getItem('ec2bench-lang'); } catch (e) {}
         var param = (location.search.match(/[?&]lang=(en|zh)\b/) || [])[1];
-        var lang = param || saved || ((navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
+        var lang = param || saved || 'en';
         var root = document.documentElement;
         root.setAttribute('data-lang', lang);
         root.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
