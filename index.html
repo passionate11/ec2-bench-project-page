@@ -204,10 +204,10 @@
             </article>
             <article class="problem-card gap">
               <span class="tier-label"><svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="problem.c3tag">What was missing</span></span>
-              <h3 data-i18n="problem.c3h">Evaluation stopped at the query</h3>
-              <p data-i18n="problem.c3p">Existing benchmarks such as RouterBench, LLMRouterBench, LLMSwitchBench, and M4A1 score
-              routing decisions for individual queries or turns on standalone inference workloads. That leaves the
-              trajectory-level effects on cost and privacy unmeasured.</p>
+              <h3 data-i18n="problem.c3h">Prior benchmarks score one query at a time</h3>
+              <p data-i18n="problem.c3p">RouterBench, LLMRouterBench, LLMSwitchBench, and M4A1 only ask whether a single query
+              or turn should go to the edge or the cloud. None of them measures what happens across a whole agent
+              trajectory, where the cloud joins many times and each call adds cost and carries more local data away.</p>
               <div class="stat-row"><span class="stat-pill neutral" data-i18n="problem.c3pill">trajectory-level evaluation needed</span></div>
             </article>
           </div>
