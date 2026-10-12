@@ -1,15 +1,18 @@
 /* ============================================================
-   ACE-BENCH — leaderboard + interactive trade-off plot
+   EC²-Bench — leaderboard + interactive trade-off plot
    ============================================================ */
 
 const state = {
   results: [],
   filtered: [],
   points: [],
-  sort: "completion"
+  sort: "completion",
+  suite: "glm",          // cloud-model setting: "glm" (Table 2) | "dsflash" (Table 11)
+  xAxis: "cost",         // plot x-axis: "cost" | "exposure"
+  plotEdge: "all"        // plot highlight: "all" | edge model name
 };
 
-const dataVersion = "20260624-redesign";
+const dataVersion = "20261012-ec2";
 
 /* ============================================================
    i18n — bilingual EN / 中文
@@ -21,163 +24,203 @@ let currentLang = document.documentElement.getAttribute("data-lang") || "en";
 
 const I18N_ZH = {
   "nav.leaderboard": "排行榜",
-  "nav.problem": "问题",
+  "nav.problem": "动机",
   "nav.benchmark": "基准",
   "nav.strategies": "策略",
   "nav.findings": "发现",
   "nav.code": "代码",
 
-  "hero.venue": "基准与分析 · 2026",
+  "hero.venue": "基准与实证研究 · 2026",
   "hero.title": `赋能端侧智能体：大模型智能体执行中<br><span class="title-accent">端云协同</span>的系统性分析`,
   "hero.affil1": `<sup>1</sup> 东北大学，沈阳`,
   "hero.affil2": `<sup>2</sup> 清华大学，北京`,
-  "hero.affil3": `<sup>3</sup> 中国移动在线服务`,
+  "hero.affil3": `<sup>3</sup> 中国移动在线服务有限公司，北京`,
   "hero.corr": `<span>*</span> 通讯作者`,
   "hero.btnCode": "代码与数据",
   "hero.btnPaper": "论文 (PDF)",
   "hero.btnLeaderboard": "排行榜",
   "hero.btnBibtex": "BibTeX",
-  "hero.thesis": `如今大模型智能体在私有的本地工作区中运行——文件、数据库、终端与应用状态。全部在端侧运行可保护数据但能力受限；全部交给云端虽强大却会泄露上下文。<strong>真正的问题是端与云应如何协同</strong>——而 <strong>ACE-BENCH</strong> 是首个在<em>任务效用</em>、<em>资源成本</em>与<em>隐私</em>三个维度上同时衡量这一选择的基准。`,
-  "hero.caption": `<strong>核心矛盾。</strong>仅端侧执行让数据留在本地，却会撞上能力瓶颈；仅云端执行能完成任务，但会暴露累积的本地上下文。端云协同力求两全——按需调用云端，既保持能力<em>又</em>保护隐私。`,
+  "hero.thesis": `当大模型智能体在本地数字工作区中执行长程任务时，云端协助不再是“每个查询路由一次”的一次性决策，而是<strong>穿插在整条执行轨迹之中</strong>，每一次云端调用都可能把累积的工作区上下文带出设备。<strong>EC²-Bench</strong> 让这些轨迹级效应变得可度量：在 128 个可执行工作区任务上，同时从<em>任务表现</em>、<em>资源用量</em>与<em>隐私暴露</em>三个维度评估四种代表性的端云协同策略。`,
+  "hero.caption": `<strong>总览。</strong>一个代表性的长程工作流，端侧与云端智能体在同一条轨迹上交替参与；我们研究的四种协同策略，区别在于<em>由谁</em>决定云端何时加入、以及云端被调用后<em>做什么</em>；以及三个研究问题。`,
 
   "takeaways.kicker": "要点",
   "takeaways.h2": "核心要点",
-  "takeaways.c1h": "没有哪一端能独赢",
-  "takeaways.c1p": `仅云端的智能体能力强但泄露严重（隐私约 22%）；仅端侧的智能体隐私完美，却在困难的长程工作区任务上力不从心。`,
-  "takeaways.c2h": "协同有效——前提是组织得当",
-  "takeaways.c2p": `端云协同能取得更好的平衡——这取决于<strong>何时</strong>调用云端、<strong>传输哪些上下文</strong>。最优配置以约 <strong>1/10 的成本</strong>逼近云端效用，且隐私强得多。`,
-  "takeaways.c3h": "端侧能力重塑配方",
-  "takeaways.c3p": `端侧模型越强，对云端的依赖越少。最优模式从步级回退转向任务路由与规划——成本只是零头（<strong>$3 对 $35</strong>）。`,
-  "takeaways.c4h": "有选择 ≠ 安全",
-  "takeaways.c4p": `即便谨慎使用云端，仍可能暴露敏感的本地上下文。未来的智能体必须<strong>同时</strong>优化模型调用与上下文共享的决策。`,
+  "takeaways.c1h": "端云协同对长程智能体有效",
+  "takeaways.c1p": `部分云端参与就能补回大部分能力差距。以 Qwen3.5-2B 为端侧时，逐步路由把完成度从 <strong>12.75 提升到 39.97</strong>，云成本仅为纯云端的 <strong>22.7%</strong>；多个配置都高于端侧与云端之间的线性插值。`,
+  "takeaways.c2h": "端侧越强，性能趋同，隐私不趋同",
+  "takeaways.c2p": `各策略之间的完成度差距从 <strong>25.22</strong> 分（2B）缩小到 <strong>3.67</strong> 分（Qwen3.7-Plus）。隐私暴露却依然分化：在 27B 上，各策略完成度只差 4.60 分，隐私暴露却相差 <strong>35.93</strong> 分。`,
+  "takeaways.c3h": "最优协同方式随之转移",
+  "takeaways.c3p": `端侧较弱时，外部路由与云端直接执行效果最好（2B：逐步路由 <strong>39.97</strong>，端侧控制委托仅 15.86）。端侧变强后则转向端侧自主调用与云端<strong>建议</strong>（Qwen3.7-Plus：<strong>76.84</strong>）。`,
+  "takeaways.c4h": "两项端侧能力是关键",
+  "takeaways.c4p": `一是知道<strong>何时调用</strong>云端（端侧控制委托比相同调用率的随机调用基线最多高 +4.4）；二是<strong>用好云端的指导</strong>（指令遵循训练使建议模式下的完成度从 24.8 提升到 28.8）。`,
 
   "lb.kicker": "排行榜",
+  "lb.suiteLabel": "云端模型",
+  "lb.optGlm": "GLM-5.3（主实验）",
+  "lb.optDs": "DeepSeek-V4.1-Flash（附录）",
   "lb.filterLabel": "策略族",
   "lb.optAll": "全部策略",
   "lb.optEdge": "仅端侧",
   "lb.optCloud": "仅云端",
   "lb.optEdgeCloud": "端云协同",
+  "lb.edgeLabel": "端侧模型",
+  "lb.optAllEdge": "全部端侧模型",
   "lb.sortCompletion": "完成度 ↑",
-  "lb.sortPrivacy": "隐私 ↑",
+  "lb.sortExposure": "隐私暴露 ↓",
   "lb.sortCost": "云成本 ↓",
   "lb.thMethod": "方法",
   "lb.thCompletion": "完成度 ↑",
   "lb.thPass": "Pass",
-  "lb.thPrivacy": "隐私 ↑",
+  "lb.thExposure": "隐私暴露 ↓",
   "lb.thCost": "云成本 ↓",
-  "lb.note": `每个方法列出其端侧 / 云端模型、云端 token（原始 / 缓存读取 / 输出，单位百万）与端侧 FLOPs（PetaFLOPs）。隐私在 100 个隐私标注任务上计算；所示箭头方向均为越高越好。`,
+  "lb.note": `主实验以 GLM-5.3 作为云端模型（论文表 2）；附录设置换成 DeepSeek-V4.1-Flash（表 11）。每行列出端侧 / 云端模型、云端 token（原始 / 缓存读取 / 输出，单位百万）与端侧 FLOPs（PetaFLOPs；Qwen3.7-Plus 参数量未公开，故不报告）。结果为 3 次运行的平均；Pass<sup>3</sup> 统计三次均成功（得分 &gt; 0.7）的任务比例。隐私暴露指在 100 个标注任务上对云端可见的敏感单元占比：<strong>越低越好</strong>。`,
 
-  "problem.kicker": "问题",
-  "problem.h2": "多步智能体中的云端调用悄然泄露工作区。",
-  "problem.lede": `当今最强的智能体依赖云端托管的前沿大模型。但智能体与本地工作区交互时会不断累积上下文——文件内容、工具输出、不断变化的应用状态——每一次云端调用都可能把其中一部分送出设备。这使云端执行成为真实的隐私通道，而端侧执行则以更弱的能力换取这种安全。`,
+  "problem.kicker": "动机",
+  "problem.h2": "从一次性路由，到穿插于轨迹的协同。",
+  "problem.lede": `端侧设备运行小模型（通常 ≤10B 参数），数据留在本地，却难以胜任复杂的规划与工具使用；云端前沿大模型能力强得多，但成本高，而且能看到发给它的一切。以往的端云系统<em>每个查询只协调一次</em>。而在长程智能体执行中，云端会在轨迹的不同位置参与：每一次参与决策都会影响后续步骤、累积成本，并决定有多少工作区信息离开设备。`,
   "problem.c1tag": "仅端侧",
-  "problem.c1h": "私密，但能力受限",
-  "problem.c1p": `所有步骤在小型本地模型上运行。数据不出设备——但能力密集、长程的任务会暴露明显瓶颈。`,
-  "problem.c1pillA": "100% 隐私",
-  "problem.c1pillB": "效用低",
+  "problem.c1h": "本地，但能力有限",
+  "problem.c1p": `每个动作都由端侧模型生成。没有任何暴露，但长程工作区任务会撞上能力瓶颈：Qwen3.5-2B 完成度仅 12.75%，Qwen3.5-9B 为 39.12%。`,
+  "problem.c1pillA": "0% 暴露",
+  "problem.c1pillB": "完成度 12.75%（2B）",
   "problem.c2tag": "仅云端",
   "problem.c2h": "强大，但暴露",
-  "problem.c2p": `前沿大模型驱动每一步。效用很高，但累积的本地上下文被反复传输——隐私暴露与成本都最高。`,
-  "problem.c2pillA": "效用最高",
-  "problem.c2pillB": "22% 隐私",
+  "problem.c2p": `GLM-5.3 驱动每一步，完成度最高；但 87% 的标注敏感单元会到达云端，跑完整个任务集要花 $56.42。`,
+  "problem.c2pillA": "完成度 82.70%",
+  "problem.c2pillB": "暴露 87.01%",
   "problem.c3tag": "此前缺失的",
-  "problem.c3h": "以往基准研究了错误的场景",
-  "problem.c3p": `以往工作在<em>静态</em>、非智能体任务上评估端云协同——数学、问答、对话——而忽略了云端调用如何沿轨迹暴露不断变化的本地上下文。`,
-  "problem.c3pill": "需要轨迹级审计",
+  "problem.c3h": "评估停留在查询层面",
+  "problem.c3p": `RouterBench、LLMRouterBench、LLMSwitchBench、M4A1 等现有基准，评估的是单个查询或对话轮次上的路由决策，任务也多是独立推理任务。轨迹级的成本与隐私效应因此一直没有被度量。`,
+  "problem.c3pill": "需要轨迹级评估",
 
   "bench.kicker": "基准",
-  "bench.h2": "ACE-BENCH：智能体端云协同，三维度衡量。",
-  "bench.lede": `ACE-BENCH（Agentic Cloud-Edge Collaboration Benchmark，智能体端云协同基准）。128 个可执行的真实数字任务，扎根于真实工作区，并配有任务专属验证器。其中 100 个带有细粒度隐私标注，使每一次云端调用所暴露的敏感上下文都可被审计。`,
+  "bench.h2": "EC²-Bench：在整条轨迹上评估端云协同。",
+  "bench.lede": `EC²-Bench（<strong>E</strong>dge–<strong>C</strong>loud <strong>C</strong>ollaborative Agent Benchmark，端云协同智能体基准）。128 个可执行的数字工作区任务，整理自六个智能体基准，统一适配到同一个 OpenClaw 运行时，并经过筛选，确保仅端侧、仅云端与协同执行之间确实会拉开差距。其中 100 个任务带有细粒度敏感信息标注，轨迹上云端看到的每一段上下文都可以被审计。`,
   "bench.m1": "可执行任务",
-  "bench.m2": "隐私标注",
-  "bench.m3": "执行策略",
-  "bench.m4": "评估维度",
-  "bench.caption": `<strong>一次运行如何评分。</strong>每个任务自带工作区、工具与成功检查器。测评框架在选定的协同策略下执行智能体，并记录完整轨迹——模型调用、工具结果、token 用量、以及确切传给云端的上下文——再据此在三个维度上打分。`,
-  "bench.a1h": "任务效用",
-  "bench.a1p": `智能体真的把任务完成了吗？以完成度分数与 Pass<sup>n</sup> 衡量，结合基于规则的检查、环境状态审计与 LLM 评判。`,
+  "bench.m2": "隐私标注任务",
+  "bench.m3": "敏感信息单元",
+  "bench.m4": "协同策略",
+  "bench.tBench": "基准",
+  "bench.tScenario": "评估场景",
+  "bench.tModes": "协同模式",
+  "bench.tDims": "评估维度",
+  "bench.r1s": "通用 LLM 任务",
+  "bench.r1d": "任务表现 / 成本",
+  "bench.r2s": "通用 LLM 与工具使用任务",
+  "bench.r2d": "任务表现 / 成本",
+  "bench.r3s": "单轮查询",
+  "bench.r3d": "任务表现 / 成本",
+  "bench.r4s": "多轮对话",
+  "bench.r4d": "任务表现 / 成本 / 延迟",
+  "bench.r5s": "<strong>长程智能体执行</strong>",
+  "bench.r5d": "<strong>任务表现 / 资源 / 隐私</strong>",
+  "bench.tCaption": `R<sub>q</sub> / R<sub>s</sub>：查询级 / 逐步路由；D / A：端侧控制的云端委托 / 云端建议。`,
+  "bench.a1h": "任务表现",
+  "bench.a1p": `任务完成了吗？由任务专属的加权检查项（基于规则的校验、环境状态审计、基于评分细则的 LLM 评判）得到完成度分数；Pass<sup>3</sup> 要求三次运行全部成功。`,
   "bench.a2h": "资源用量",
-  "bench.a2p": `代价几何？云端 token（原始 / 缓存读取 / 输出）、估算费用、以及端侧 FLOPs——以一份画像呈现，绝不压缩为单一标量。`,
-  "bench.a3h": "隐私表现",
-  "bench.a3p": `泄露了什么？在标注的<em>敏感单元</em>（个人与组织机密，12 个子类）上计算风险加权的非泄露分数，并比对一切对云端可见的内容。`,
-  "bench.coverage": "任务覆盖",
-  "bench.cov1": "信息检索",
-  "bench.cov2": "内容生成",
-  "bench.cov3": "数据分析",
-  "bench.cov4": "办公生产力",
-  "bench.cov5": "开发",
-  "bench.cov6": "工作流自动化",
+  "bench.a2p": `代价几何？云端输入、缓存读取与输出 token 及其美元费用，加上端侧 FLOPs（2·N<sub>act</sub>·T），以一组画像呈现，不压缩成单一数字。`,
+  "bench.a3h": "隐私暴露",
+  "bench.a3p": `什么到达了云端？在任一云端可见上下文中被披露的标注<em>敏感单元</em>（个人与组织两大类，共 12 个子类）所占比例。LLM 评判器能识别改写后的泄露，相对人工标注的 F1 为 96.9%。`,
+  "bench.coverage": "任务类别",
+  "bench.cov1": "办公与日常 · 36",
+  "bench.cov2": "信息检索与收集 · 34",
+  "bench.cov3": "安全与防护 · 21",
+  "bench.cov4": "开发与运维 · 14",
+  "bench.cov5": "数据分析 · 13",
+  "bench.cov6": "自动化 · 10",
+  "bench.sources": "任务来源",
+  "bench.srcCurated": "自建 · 7",
 
   "strat.kicker": "协同策略",
-  "strat.h2": "在端与云之间分配工作的六种方式。",
-  "strat.lede": `两个单侧基线，加上四种代表性的协同模式。它们的关键区别在于一个决定性维度：<strong>云端何时参与</strong>——是在任务开始前就固定，还是随轨迹展开实时决定。`,
+  "strat.h2": "把云端引入智能体轨迹的四种方式。",
+  "strat.lede": `两个单侧基线，加上四种代表性的端云协同策略。它们沿两个维度区分：<strong>由谁决定</strong>云端何时参与（外部路由器，还是端侧智能体自己），以及云端被调用后<strong>做什么</strong>（直接生成动作，还是向端侧提供建议）。`,
   "strat.col1": "单侧基线",
   "strat.s1tag": "仅端侧",
-  "strat.s1p": "每一步都在本地运行。无云端暴露；能力受限于端侧模型。",
+  "strat.s1p": "每个动作都由端侧模型生成。无暴露；能力受限于端侧模型。",
   "strat.s2tag": "仅云端",
-  "strat.s2p": "每一步都在云端运行。能力参照点——也是隐私 / 成本的上限。",
-  "strat.col2": `执行前协调 <small>任务开始前固定</small>`,
-  "strat.s3tag": "草图引导",
-  "strat.s3p": "云端先写好整体计划；随后端侧模型独立执行整条轨迹。",
-  "strat.s4tag": "任务级路由",
-  "strat.s4p": "一次性路由器在任务开始前，把整个任务分配给端侧或云端。",
-  "strat.col3": `运行时协调 <small>逐步决定</small>`,
-  "strat.s5tag": "步级路由",
-  "strat.s5p": `端侧执行每一步，但在<em>不确定</em>时把该步上升到云端。`,
-  "strat.s6tag": "自适应云端协助",
-  "strat.s6p": "端侧保持主导，仅在主动求助时才向云端获取计划、提示或纠错。",
+  "strat.s2p": "每个动作都由云端模型生成。是能力参照点，也是成本 / 暴露的上限。",
+  "strat.col2": `外部路由 <small>由路由器决定</small>`,
+  "strat.s3tag": "查询路由",
+  "strat.s3p": "RouteLLM 矩阵分解路由器在执行前读一次任务指令，把整条轨迹交给端侧或云端。",
+  "strat.s4tag": "逐步路由",
+  "strat.s4p": "每一步生成前，依据端侧模型下一个 token 的熵（GlimpRouter 风格）决定这一步由端侧还是云端生成。",
+  "strat.col3": `端侧控制 <small>由端侧智能体决定</small>`,
+  "strat.s5tag": "端侧控制的云端委托",
+  "strat.s5p": "默认在端侧执行。端侧智能体通过委托工具把当前步交给云端，由云端生成下一个动作，随后控制权交回端侧。",
+  "strat.s6tag": "端侧控制的云端建议",
+  "strat.s6p": "默认在端侧执行。端侧智能体向云端请求计划、建议或纠错，然后自己生成动作。",
 
   "find.kicker": "关键发现",
-  "find.h2": "三维视角揭示了什么。",
-  "find.lede": `把每个策略画在同一个效用–成本–隐私空间里，会暴露单一成功率所掩盖的权衡。把每个点看作一个策略：<strong>越靠右</strong> = 云成本越高，<strong>越靠上</strong> = 完成度越高，<strong>点内数字</strong> = 隐私。`,
-  "find.axY": "Y · 完成度",
-  "find.axX": "X · 云成本",
-  "find.axN": "# · 隐私",
-  "find.f1tag": "发现 1",
-  "find.f1h": "单侧执行无法兼顾三者。",
-  "find.f1p": `仅云端效用最高，但隐私跌破 25%；仅端侧保持 100% 隐私，却损失超过 10 分完成度。每个极端都牺牲了一个维度。`,
-  "find.f2tag": "发现 2",
-  "find.f2h": "协同能移动工作点——当组织得当时。",
-  "find.f2p": `端云协同通过仅在必要时调用云端，取得显著更好的平衡。但增益取决于<em>哪种</em>模式：云端使用与上下文传输如何安排。`,
-  "find.f3tag": "发现 3",
-  "find.f3h": "更强的端侧改变最优模式。",
-  "find.f3p": `有了强端侧模型，优选配方从步级回退转向任务路由、规划与纠错引导——在削减成本与暴露的同时保持效用（自适应协助：<strong>$3.07</strong> 对 仅云端的 <strong>$34.69</strong>）。`,
-  "find.footnote": `虚线轮廓将共享同一端侧骨干的策略分组。悬停任一点可看其精确数值。结论：未来的端云智能体应把云端调用视为模型使用<em>与</em>上下文共享的联合决策——而非简单的质量–成本权衡。`,
+  "find.h2": "三个研究问题，同一张图。",
+  "find.lede": `所有配置都画在同一张图里。<strong>越靠上</strong>完成度越高；x 轴可在云成本与隐私暴露之间切换（两者都是<strong>越靠左</strong>越好）。虚线连接每个端侧模型的仅端侧点与仅云端点：位于虚线上方的点，优于两端按比例的简单混合。`,
+  "find.xCost": "云成本",
+  "find.xExposure": "隐私暴露",
+  "find.edgeAll": "全部端侧",
+  "find.f1tag": "RQ1 · 有效性",
+  "find.f1h": "协同位于两端之间，且常常更优。",
+  "find.f1p": `协同执行在完成度上优于仅端侧，同时相比仅云端显著减少对云端的依赖。在成本–性能与隐私–性能两个空间里，都有多个配置位于端云线性插值之上。`,
+  "find.f2tag": "RQ2 · 端侧能力",
+  "find.f2h": "端侧变强，缩小的是性能差距，而非隐私差距。",
+  "find.f2p": `最优协同配置的完成度从 <strong>39.97</strong>（2B）升至 <strong>76.84</strong>（Qwen3.7-Plus），逼近仅云端的 82.70。各策略的完成度趋于一致，但隐私暴露仍高度依赖所选策略。`,
+  "find.f3tag": "RQ3 · 协同方式转移",
+  "find.f3h": "从路由器主导的执行，转向端侧主导的建议。",
+  "find.f3p": `端侧较弱时，外部路由与云端直接执行占优；随着端侧能力增强，排序发生反转，更适合端侧自主调用、由云端<em>出主意</em>而非<em>直接动手</em>。`,
+  "find.fig3cap": `<strong>RQ2：性能趋同，隐私不趋同。</strong>每个端侧模型下，各协同策略的均值（圆点）与范围（竖条）。(a) 端侧越强，完成度范围越窄；(b) 隐私暴露的范围依然很宽。`,
+  "find.fig4cap": `<strong>RQ3：转移背后的端侧能力。</strong>(a) 端侧控制委托 vs. 相同云调用率的随机调用基线：2B 提升 +1.2，更强的端侧提升 +3.0 至 +4.4。(b) 在固定云端建议设置下，对 Qwen3.5-2B 做指令遵循强化学习，完成度从 24.8 升至 28.8，而仅端侧表现基本不变。`,
+  "find.footnote": `结论：未来的端侧模型不仅要优化独立能力，还要优化<em>协同本身</em>，即判断何时调用云端，并用好云端返回的内容。由于性能趋同而暴露不趋同，隐私成为区分各协同策略的关键维度。`,
 
   "res.kicker": "资源与引用",
   "res.h2": "复现、扩展、引用。",
   "res.c1h": "代码与数据集",
-  "res.c1p": "任务、可执行工作区、验证器，以及每种协同策略的实现。",
+  "res.c1p": "任务、可执行工作区、验证器、敏感信息标注与评测框架。",
   "res.c2h": "完整论文",
-  "res.c2p": "形式化、任务构建、隐私标注协议与完整分析。",
+  "res.c2p": "问题形式化、任务构建、隐私标注与验证，以及完整的实证研究。",
   "res.c2go": "阅读 PDF",
   "res.copy": "复制",
 
-  "footer.tagline": "面向工作区接地的大模型智能体的端云协同。"
+  "footer.tagline": "长程大模型智能体执行中的端云协同。"
 };
 
 /* JS-generated strings (both languages, since the source is JS not the DOM). */
 const JS_STR = {
   en: {
     top: "Top", edge: "Edge", cloud: "Cloud", tok: "Tok", flops: "FLOPs",
-    tipCompletion: "Completion", tipCost: "Cloud cost", tipPrivacy: "Privacy",
-    copied: "Copied!", copyFail: "Press Ctrl+C",
-    axX: "Cloud cost (USD)  →  cheaper is left", axY: "Completion score  →  higher is up",
-    legEdge: "Edge-only", legCloud: "Cloud-only",
-    loadErr: m => `Couldn't load results (${m}). Open this page over http(s), or see the paper's Table 1 for the full numbers.`
+    tipCompletion: "Completion", tipCost: "Cloud cost", tipExposure: "Privacy exp.",
+    copied: "Copied!", copyFail: "Press Ctrl+C", copy: "Copy",
+    axXcost: "Cloud cost (USD)  ·  left is cheaper",
+    axXexposure: "Privacy exposure (%)  ·  left is more private",
+    axY: "Completion (%)  ·  up is better",
+    legEdge: "Edge-only", legCloud: "Cloud-only", legInterp: "Linear interp.",
+    loadErr: m => `Couldn't load results (${m}). Open this page over http(s), or see Table 2 of the paper for the full numbers.`
   },
   zh: {
     top: "最佳", edge: "端", cloud: "云", tok: "Tok", flops: "FLOPs",
-    tipCompletion: "完成度", tipCost: "云成本", tipPrivacy: "隐私",
-    copied: "已复制！", copyFail: "请按 Ctrl+C",
-    axX: "云成本 (美元)  →  越靠左越省", axY: "完成度  →  越靠上越高",
-    legEdge: "仅端侧", legCloud: "仅云端",
-    loadErr: m => `结果加载失败（${m}）。请通过 http(s) 打开本页，或查看论文表 1 获取完整数值。`
+    tipCompletion: "完成度", tipCost: "云成本", tipExposure: "隐私暴露",
+    copied: "已复制！", copyFail: "请按 Ctrl+C", copy: "复制",
+    axXcost: "云成本（美元） ·  越靠左越省",
+    axXexposure: "隐私暴露（%） ·  越靠左越私密",
+    axY: "完成度（%） ·  越靠上越好",
+    legEdge: "仅端侧", legCloud: "仅云端", legInterp: "线性插值",
+    loadErr: m => `结果加载失败（${m}）。请通过 http(s) 打开本页，或查看论文表 2 获取完整数值。`
   }
+};
+
+const METHOD_ZH = {
+  "Edge-only": "仅端侧",
+  "Cloud-only": "仅云端",
+  "Query Routing": "查询路由",
+  "Per-step Routing": "逐步路由",
+  "Edge-Ctrl. Delegation": "端侧控制委托",
+  "Edge-Ctrl. Advisory": "端侧控制建议"
 };
 
 function t(key) {
   const pack = JS_STR[currentLang] || JS_STR.en;
   return key in pack ? pack[key] : JS_STR.en[key];
+}
+
+function methodLabel(name) {
+  return currentLang === "zh" && METHOD_ZH[name] ? METHOD_ZH[name] : name;
 }
 
 function applyLang(lang) {
@@ -197,12 +240,12 @@ function applyLang(lang) {
   });
 
   document.title = lang === "zh"
-    ? "ACE-BENCH · 大模型智能体的端云协同基准"
-    : "ACE-BENCH · Edge-Cloud Collaboration for LLM Agents";
+    ? "EC²-Bench · 长程大模型智能体的端云协同基准"
+    : "EC²-Bench · Edge-Cloud Collaboration for Long-Horizon LLM Agents";
   const lbl = document.getElementById("lang-toggle-label");
   if (lbl) lbl.textContent = lang === "zh" ? "EN" : "中文";
 
-  try { localStorage.setItem("acebench-lang", lang); } catch (e) {}
+  try { localStorage.setItem("ec2bench-lang", lang); } catch (e) {}
 
   // Re-render JS-driven content in the new language.
   if (state.results && state.results.length) {
@@ -218,31 +261,47 @@ function bindLangToggle() {
 }
 
 
-/* Execution-family colors (match the page + teaser figure) */
+/* Execution-family colors (edge = blue, cloud = red, collaboration = violet) */
 const groupColors = {
   "Edge-only":  "#2563eb",
   "Edge-Cloud": "#7c3aed",
   "Cloud-only": "#dc2626"
 };
 
-/* Collaboration-method colors (match paper Figure 3) */
+/* Collaboration-strategy colors (plot points + legend) */
 const methodColors = {
-  "Sketch-Guided Edge Execution.": "#1f9d57",
-  "Task-Level Routing":            "#e8820e",
-  "Step-Level Routing":            "#8b5cf6",
-  "Adaptive Cloud Assistance.":    "#2f7fe0",
-  "Edge-only":                     "#2563eb",
-  "Cloud-only":                    "#dc2626"
+  "Query Routing":         "#e8820e",
+  "Per-step Routing":      "#8b5cf6",
+  "Edge-Ctrl. Delegation": "#1f9d57",
+  "Edge-Ctrl. Advisory":   "#2f7fe0",
+  "Edge-only":             "#2563eb",
+  "Cloud-only":            "#dc2626"
 };
 
 const shortNames = {
-  "Edge-only": "Edge",
-  "Cloud-only": "Cloud",
-  "Sketch-Guided Edge Execution.": "Sketch",
-  "Task-Level Routing": "Task-route",
-  "Step-Level Routing": "Step-route",
-  "Adaptive Cloud Assistance.": "Assist"
+  "Query Routing": "Query",
+  "Per-step Routing": "Per-step",
+  "Edge-Ctrl. Delegation": "Delegation",
+  "Edge-Ctrl. Advisory": "Advisory"
 };
+
+const shortNamesZh = {
+  "Query Routing": "查询路由",
+  "Per-step Routing": "逐步路由",
+  "Edge-Ctrl. Delegation": "委托",
+  "Edge-Ctrl. Advisory": "建议"
+};
+
+/* Main cloud model per suite (anchor for the interpolation lines). */
+const SUITE_CLOUD = { glm: "GLM-5.3", dsflash: "DeepSeek-v4.1-Flash" };
+
+const EDGE_ORDER = ["Qwen3.5-2B", "Qwen3.5-9B", "Qwen3.5-27B", "Qwen3.7-Plus"];
+
+function edgeShort(name) {
+  if (!name) return "";
+  if (name === "Qwen3.7-Plus") return "Plus";
+  return name.replace(/^Qwen3\.\d+-/, "");
+}
 
 const format = {
   percent: value => `${Number(value).toFixed(2)}`,
@@ -279,22 +338,59 @@ async function init() {
 }
 
 function hydrateStats(metrics) {
-  const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  const set = (id, value) => { const el = document.getElementById(id); if (el && value != null) el.textContent = value; };
   set("task-count", metrics.tasks);
   set("privacy-task-count", metrics.privacyAnnotatedTasks);
-  set("strategy-count", metrics.executionStrategies);
+  set("unit-count", metrics.sensitivityUnits != null ? metrics.sensitivityUnits.toLocaleString("en-US") : null);
+  set("strategy-count", metrics.collaborationStrategies);
+}
+
+function suiteRows() {
+  return state.results.filter(item => item.suite === "both" || item.suite === state.suite);
+}
+
+function setSuite(suite) {
+  state.suite = suite;
+  const sel = document.getElementById("suite-filter");
+  if (sel) sel.value = suite;
+  syncTabs("#plot-suite-tabs", "suite", suite);
+  renderLeaderboard();
+  renderTradeoff();
 }
 
 function bindControls() {
-  const filter = document.getElementById("group-filter");
-  if (filter) filter.addEventListener("change", renderLeaderboard);
+  ["group-filter", "edge-filter"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("change", renderLeaderboard);
+  });
+  const suiteSel = document.getElementById("suite-filter");
+  if (suiteSel) suiteSel.addEventListener("change", () => setSuite(suiteSel.value));
+
   document.querySelectorAll(".leaderboard-tabs button[data-sort]").forEach(button => {
     button.addEventListener("click", () => {
       state.sort = button.dataset.sort;
-      syncSortTabs();
+      syncTabs(".leaderboard-tabs", "sort", state.sort);
       renderLeaderboard();
     });
   });
+  document.querySelectorAll("#plot-x-tabs button[data-x]").forEach(button => {
+    button.addEventListener("click", () => {
+      state.xAxis = button.dataset.x;
+      syncTabs("#plot-x-tabs", "x", state.xAxis);
+      renderTradeoff();
+    });
+  });
+  document.querySelectorAll("#plot-edge-tabs button[data-edge]").forEach(button => {
+    button.addEventListener("click", () => {
+      state.plotEdge = button.dataset.edge;
+      syncTabs("#plot-edge-tabs", "edge", state.plotEdge);
+      renderTradeoff();
+    });
+  });
+  document.querySelectorAll("#plot-suite-tabs button[data-suite]").forEach(button => {
+    button.addEventListener("click", () => setSuite(button.dataset.suite));
+  });
+
   const canvas = document.getElementById("tradeoff-canvas");
   if (!canvas) return;
   canvas.addEventListener("mousemove", handlePlotHover);
@@ -325,16 +421,16 @@ function bindCopyButtons() {
       if (label) label.textContent = ok ? t("copied") : t("copyFail");
       btn.classList.add("copied");
       setTimeout(() => {
-        if (label) label.textContent = prev || t("copy") || "Copy";
+        if (label) label.textContent = prev || t("copy");
         btn.classList.remove("copied");
       }, 1600);
     });
   });
 }
 
-function syncSortTabs() {
-  document.querySelectorAll(".leaderboard-tabs button[data-sort]").forEach(button => {
-    const isActive = button.dataset.sort === state.sort;
+function syncTabs(scope, attr, value) {
+  document.querySelectorAll(`${scope} button[data-${attr}]`).forEach(button => {
+    const isActive = button.dataset[attr] === value;
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
@@ -375,43 +471,43 @@ function bindActiveNavigation() {
 }
 
 function getSortedResults() {
-  const filterEl = document.getElementById("group-filter");
-  const group = filterEl ? filterEl.value : "all";
+  const groupEl = document.getElementById("group-filter");
+  const edgeEl = document.getElementById("edge-filter");
+  const group = groupEl ? groupEl.value : "all";
+  const edge = edgeEl ? edgeEl.value : "all";
   const sort = state.sort;
-  const rows = state.results.filter(item => group === "all" || item.group === group);
+  const rows = suiteRows().filter(item =>
+    (group === "all" || item.group === group) &&
+    (edge === "all" || item.edgeModel === edge || (item.group === "Cloud-only" && group !== "Edge-Cloud")));
   const sorted = [...rows];
   sorted.sort((a, b) => {
-    if (sort === "privacy") return b.privacy - a.privacy || b.completion - a.completion;
+    if (sort === "exposureAsc") return a.privacyExposure - b.privacyExposure || b.completion - a.completion;
     if (sort === "cloudCostAsc") return a.cloudCost - b.cloudCost || b.completion - a.completion;
-    if (sort === "pass3") return b.pass3 - a.pass3 || b.completion - a.completion;
-    return b.completion - a.completion || b.privacy - a.privacy;
+    return b.completion - a.completion || a.privacyExposure - b.privacyExposure;
   });
   return sorted;
 }
 
-function cleanMethod(name) {
-  return name.replace(/\.$/, "");
-}
-
 function modelLine(item) {
   const parts = [];
-  if (item.edgeModel && item.edgeModel !== "None")
+  if (item.edgeModel)
     parts.push(`<span class="ml-tag edge">${t("edge")}</span>${item.edgeModel}`);
-  if (item.cloudModel && item.cloudModel !== "None")
+  if (item.cloudModel)
     parts.push(`<span class="ml-tag cloud">${t("cloud")}</span>${item.cloudModel}`);
   return parts.join('<span class="ml-sep">+</span>') || item.model;
 }
 
 function renderLeaderboard() {
   const body = document.getElementById("leaderboard-body");
+  if (!body) return;
   state.filtered = getSortedResults();
   body.innerHTML = state.filtered.map((item, index) => `
     <tr class="${index === 0 ? "top-row" : ""}">
       <td class="rank">${index + 1}</td>
       <td class="method-cell">
         <div class="method-name">
-          <span class="dot" style="background:${groupColors[item.group]}"></span>
-          <span>${cleanMethod(item.method)}</span>
+          <span class="dot" style="background:${methodColors[item.method] || groupColors[item.group]}"></span>
+          <span>${methodLabel(item.method)}</span>
           ${index === 0 ? `<span class="top-badge">${t("top")}</span>` : ""}
         </div>
         <div class="model-line">${modelLine(item)}</div>
@@ -424,26 +520,48 @@ function renderLeaderboard() {
         </div>
       </td>
       <td class="compact-metric pass-metric">${format.percent(item.pass3)}%</td>
-      <td class="compact-metric privacy-metric">${format.percent(item.privacy)}%</td>
-      <td class="compact-metric cost-metric">${format.money(item.cloudCost)}</td>
+      <td class="compact-metric privacy-metric">${format.percent(item.privacyExposure)}%</td>
+      <td class="compact-metric cost-metric">${item.group === "Edge-only" ? "–" : format.money(item.cloudCost)}</td>
     </tr>
   `).join("");
 }
 
 /* ---------------------- Trade-off plot ---------------------- */
 
-const PLOT = { xMin: -1.5, xMax: 38, yMin: 38, yMax: 75 };
+function niceStep(span, target) {
+  const raw = span / target;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const norm = raw / mag;
+  const step = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10;
+  return step * mag;
+}
+
+function xValue(item) {
+  return state.xAxis === "exposure" ? item.privacyExposure : item.cloudCost;
+}
+
+function plotRanges(rows) {
+  const xs = rows.map(xValue);
+  const ys = rows.map(r => r.completion);
+  const xMaxRaw = state.xAxis === "exposure" ? 100 : Math.max(...xs);
+  const xStep = niceStep(xMaxRaw, 5);
+  const xMax = Math.ceil(xMaxRaw / xStep) * xStep;
+  const yStep = 10;
+  const yMin = Math.max(0, Math.floor((Math.min(...ys) - 4) / yStep) * yStep);
+  const yMax = Math.min(100, Math.ceil((Math.max(...ys) + 4) / yStep) * yStep);
+  return { xMin: -xMax * 0.035, xMax: xMax * 1.02, xStep, xTop: xMax, yMin, yMax, yStep };
+}
 
 function renderTradeoff() {
   const canvas = document.getElementById("tradeoff-canvas");
-  if (!canvas) return;
+  if (!canvas || !state.results.length) return;
   const ratio = window.devicePixelRatio || 1;
 
   // Display size tracks container width; logical size == display size (clean hover math)
   canvas.style.width = "100%";
   const displayW = canvas.getBoundingClientRect().width || 760;
   const W = Math.max(560, displayW);
-  const H = Math.round(W * 0.56);
+  const H = Math.round(W * 0.62);
   canvas.style.height = `${H}px`;
   canvas.width = W * ratio;
   canvas.height = H * ratio;
@@ -454,61 +572,130 @@ function renderTradeoff() {
   ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
   ctx.clearRect(0, 0, W, H);
 
-  const margin = { top: 92, right: 28, bottom: 64, left: 64 };
+  const rows = suiteRows();
+  const margin = { top: 56, right: 28, bottom: 64, left: 64 };
   const plot = { x: margin.left, y: margin.top, w: W - margin.left - margin.right, h: H - margin.top - margin.bottom };
-  const { xMin, xMax, yMin, yMax } = PLOT;
+  const R = plotRanges(rows);
+  const pos = item => ({
+    x: plot.x + ((xValue(item) - R.xMin) / (R.xMax - R.xMin)) * plot.w,
+    y: plot.y + (1 - ((item.completion - R.yMin) / (R.yMax - R.yMin))) * plot.h
+  });
 
-  drawPlotFrame(ctx, plot, xMin, xMax, yMin, yMax);
-  drawBackboneContours(ctx, plot, xMin, xMax, yMin, yMax);
+  drawPlotFrame(ctx, plot, R);
+  drawInterpolation(ctx, rows, pos);
 
-  state.points = state.results.map(item => {
-    const x = scaleX(item.cloudCost, plot, xMin, xMax);
-    const y = plot.y + (1 - ((item.completion - yMin) / (yMax - yMin))) * plot.h;
-    const radius = (W < 640) ? 15 : 18;
-    drawPoint(ctx, x, y, radius, item);
+  const radius = (W < 640) ? 12 : 14;
+  const dimmed = item => state.plotEdge !== "all" && item.edgeModel && item.edgeModel !== state.plotEdge;
+  // Draw dimmed points first so highlighted ones sit on top; cloud-only last.
+  const order = [...rows].sort((a, b) =>
+    (dimmed(b) - dimmed(a)) || ((a.group === "Cloud-only") - (b.group === "Cloud-only")));
+  state.points = order.map(item => {
+    const { x, y } = pos(item);
+    drawPoint(ctx, x, y, radius, item, dimmed(item));
     return { x, y, radius, item };
   });
 
-  drawPointLabels(ctx, state.points, plot, W);
+  drawCloudLabels(ctx, state.points);
   drawLegend(ctx, plot);
 }
 
-function scaleX(value, plot, xMin, xMax) {
-  return plot.x + ((value - xMin) / (xMax - xMin)) * plot.w;
-}
-
-function plotPosition(item, plot, xMin, xMax, yMin, yMax) {
-  return {
-    x: scaleX(item.cloudCost, plot, xMin, xMax),
-    y: plot.y + (1 - ((item.completion - yMin) / (yMax - yMin))) * plot.h
-  };
-}
-
-function drawBackboneContours(ctx, plot, xMin, xMax, yMin, yMax) {
-  const groups = [
-    { label: "Qwen3.5-9B",  color: "rgba(37, 99, 235, 0.34)",
-      items: state.results.filter(item => item.edgeModel === "Qwen3.5-9B"  || item.model === "Qwen3.5-9B") },
-    { label: "Qwen3.5-27B", color: "rgba(124, 58, 237, 0.34)",
-      items: state.results.filter(item => item.edgeModel === "Qwen3.5-27B" || item.model === "Qwen3.5-27B") }
-  ];
+function drawPlotFrame(ctx, plot, R) {
   ctx.save();
-  groups.forEach(group => {
-    const points = group.items.map(item => plotPosition(item, plot, xMin, xMax, yMin, yMax));
-    if (!points.length) return;
-    const minX = Math.max(scaleX(0, plot, xMin, xMax) - 30, Math.min(...points.map(p => p.x)) - 30);
-    const maxX = Math.max(...points.map(p => p.x)) + 30;
-    const minY = Math.min(...points.map(p => p.y)) - 32;
-    const maxY = Math.max(...points.map(p => p.y)) + 32;
-    ctx.setLineDash([7, 6]);
-    ctx.lineWidth = 1.4;
-    ctx.strokeStyle = group.color;
-    roundedRect(ctx, minX, minY, maxX - minX, maxY - minY, 20);
+  ctx.strokeStyle = "#eef2ee";
+  ctx.fillStyle = "#8a958f";
+  ctx.lineWidth = 1;
+  ctx.font = "12px JetBrains Mono, ui-monospace, monospace";
+  const sx = v => plot.x + ((v - R.xMin) / (R.xMax - R.xMin)) * plot.w;
+  const sy = v => plot.y + (1 - ((v - R.yMin) / (R.yMax - R.yMin))) * plot.h;
+
+  for (let v = 0; v <= R.xTop + 1e-9; v += R.xStep) {
+    const x = sx(v);
+    ctx.beginPath();
+    ctx.moveTo(x, plot.y);
+    ctx.lineTo(x, plot.y + plot.h);
+    ctx.stroke();
+    ctx.textAlign = "center";
+    ctx.fillText(state.xAxis === "exposure" ? `${v}%` : `$${v}`, x, plot.y + plot.h + 22);
+  }
+
+  ctx.textAlign = "right";
+  for (let v = R.yMin; v <= R.yMax + 1e-9; v += R.yStep) {
+    const y = sy(v);
+    ctx.beginPath();
+    ctx.moveTo(plot.x, y);
+    ctx.lineTo(plot.x + plot.w, y);
+    ctx.stroke();
+    ctx.fillText(`${v}`, plot.x - 12, y + 4);
+  }
+
+  // Axis titles
+  ctx.fillStyle = "#3c4742";
+  ctx.font = "700 13px Inter, 'Noto Sans SC', system-ui, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText(state.xAxis === "exposure" ? t("axXexposure") : t("axXcost"), plot.x + plot.w / 2, plot.y + plot.h + 46);
+  ctx.save();
+  ctx.translate(18, plot.y + plot.h / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(t("axY"), 0, 0);
+  ctx.restore();
+  ctx.restore();
+}
+
+/* Dashed line from each edge-only point to the suite's main cloud-only point. */
+function drawInterpolation(ctx, rows, pos) {
+  const cloud = rows.find(r => r.group === "Cloud-only" && r.cloudModel === SUITE_CLOUD[state.suite]);
+  if (!cloud) return;
+  const c = pos(cloud);
+  ctx.save();
+  ctx.setLineDash([6, 5]);
+  ctx.lineWidth = 1.4;
+  rows.filter(r => r.group === "Edge-only").forEach(edge => {
+    const active = state.plotEdge === "all" || state.plotEdge === edge.edgeModel;
+    const e = pos(edge);
+    ctx.strokeStyle = active ? "rgba(60, 71, 66, 0.42)" : "rgba(60, 71, 66, 0.10)";
+    ctx.beginPath();
+    ctx.moveTo(e.x, e.y);
+    ctx.lineTo(c.x, c.y);
+    ctx.stroke();
+  });
+  ctx.restore();
+}
+
+function drawPoint(ctx, x, y, radius, item, dim) {
+  ctx.save();
+  ctx.globalAlpha = dim ? 0.16 : 1;
+  const color = methodColors[item.method] || groupColors[item.group];
+  if (item.group === "Cloud-only") {
+    drawStar(ctx, x, y, radius + 4, color);
+  } else if (item.group === "Edge-only") {
+    const s = radius * 1.7;
+    roundedRect(ctx, x - s / 2, y - s / 2, s, s, 5);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = color;
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = group.color.replace("0.34", "0.85");
-    ctx.font = "700 12px Inter, system-ui, sans-serif";
-    ctx.fillText(group.label, minX + 11, minY + 19);
-  });
+  } else {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.globalAlpha = dim ? 0.16 : 0.95;
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.globalAlpha = dim ? 0.16 : 1;
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#ffffff";
+    ctx.stroke();
+  }
+  if (item.group !== "Cloud-only") {
+    const label = edgeShort(item.edgeModel);
+    ctx.fillStyle = item.group === "Edge-only" ? color : "#ffffff";
+    ctx.font = `800 ${label.length > 3 ? 9.5 : 11}px Inter, system-ui, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(label, x, y + 0.5);
+  }
   ctx.restore();
 }
 
@@ -524,82 +711,6 @@ function roundedRect(ctx, x, y, width, height, radius) {
   ctx.quadraticCurveTo(x, y + height, x, y + height - r);
   ctx.lineTo(x, y + r);
   ctx.quadraticCurveTo(x, y, x + r, y);
-}
-
-function drawPlotFrame(ctx, plot, xMin, xMax, yMin, yMax) {
-  ctx.save();
-  ctx.strokeStyle = "#eef2ee";
-  ctx.fillStyle = "#8a958f";
-  ctx.lineWidth = 1;
-  ctx.font = "12px JetBrains Mono, ui-monospace, monospace";
-
-  const xTicks = [0, 10, 20, 30];
-  xTicks.forEach(value => {
-    const x = scaleX(value, plot, xMin, xMax);
-    ctx.beginPath();
-    ctx.moveTo(x, plot.y);
-    ctx.lineTo(x, plot.y + plot.h);
-    ctx.stroke();
-    ctx.textAlign = "center";
-    ctx.fillText(`$${value}`, x, plot.y + plot.h + 22);
-  });
-
-  ctx.textAlign = "right";
-  for (let i = 0; i <= 5; i += 1) {
-    const y = plot.y + (i / 5) * plot.h;
-    const value = Math.round(yMax - ((yMax - yMin) / 5) * i);
-    ctx.beginPath();
-    ctx.moveTo(plot.x, y);
-    ctx.lineTo(plot.x + plot.w, y);
-    ctx.stroke();
-    ctx.fillText(`${value}`, plot.x - 12, y + 4);
-  }
-
-  // Axis titles
-  ctx.fillStyle = "#3c4742";
-  ctx.font = "700 13px Inter, 'Noto Sans SC', system-ui, sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText(t("axX"), plot.x + plot.w / 2, plot.y + plot.h + 46);
-  ctx.save();
-  ctx.translate(18, plot.y + plot.h / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.fillText(t("axY"), 0, 0);
-  ctx.restore();
-  ctx.restore();
-}
-
-function drawPoint(ctx, x, y, radius, item) {
-  ctx.save();
-  const color = methodColors[item.method] || groupColors[item.group];
-  if (item.group === "Cloud-only") {
-    drawStar(ctx, x, y, radius + 3, color);
-  } else if (item.group === "Edge-only") {
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffffff";
-    ctx.fill();
-    ctx.lineWidth = 2.4;
-    ctx.setLineDash([3, 3]);
-    ctx.strokeStyle = color;
-    ctx.stroke();
-    ctx.setLineDash([]);
-  } else {
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.globalAlpha = 0.95;
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#ffffff";
-    ctx.stroke();
-  }
-  ctx.fillStyle = item.group === "Edge-only" ? color : "#ffffff";
-  ctx.font = "800 12px Inter, system-ui, sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(Math.round(item.privacy), x, y + 0.5);
-  ctx.restore();
 }
 
 function drawStar(ctx, x, y, radius, color) {
@@ -623,28 +734,15 @@ function drawStar(ctx, x, y, radius, color) {
   ctx.stroke();
 }
 
-function drawPointLabels(ctx, points, plot, W) {
-  if (W < 560) return;
+function drawCloudLabels(ctx, points) {
   ctx.save();
   ctx.font = "600 11.5px Inter, system-ui, sans-serif";
   ctx.textBaseline = "middle";
-  points.forEach(point => {
-    const { item, x, y, radius } = point;
-    if (item.group === "Cloud-only") {
-      // Label cloud models above the star
-      ctx.textAlign = "center";
-      ctx.fillStyle = "rgba(60, 71, 66, 0.78)";
-      ctx.fillText(item.cloudModel, x, y - radius - 12);
-      return;
-    }
-    const label = item.group === "Edge-only"
-      ? `Edge ${item.edgeModel.replace("Qwen3.5-", "")}`
-      : `${shortNames[item.method] || item.method}·${item.edgeModel.replace("Qwen3.5-", "")}`;
-    const alignRight = x > plot.x + plot.w * 0.74;
-    ctx.textAlign = alignRight ? "right" : "left";
-    const labelX = alignRight ? x - radius - 8 : x + radius + 8;
-    ctx.fillStyle = "rgba(60, 71, 66, 0.74)";
-    ctx.fillText(label, labelX, y);
+  ctx.fillStyle = "rgba(60, 71, 66, 0.82)";
+  points.filter(p => p.item.group === "Cloud-only").forEach(({ item, x, y, radius }) => {
+    const right = x > (state.plotW || 800) * 0.8;
+    ctx.textAlign = right ? "right" : "left";
+    ctx.fillText(item.cloudModel, right ? x - radius - 10 : x + radius + 10, y);
   });
   ctx.restore();
 }
@@ -655,18 +753,14 @@ function drawLegend(ctx, plot) {
   const y = 24;  // above the grid (in the top margin), not inside the plot area
   ctx.textBaseline = "middle";
   ctx.font = "700 11px Inter, 'Noto Sans SC', system-ui, sans-serif";
+  const names = currentLang === "zh" ? shortNamesZh : shortNames;
 
-  // Colour = collaboration method (matches the filled edge-cloud points).
-  const methods = [
-    [methodColors["Sketch-Guided Edge Execution."], "Sketch"],
-    [methodColors["Task-Level Routing"], "Task"],
-    [methodColors["Step-Level Routing"], "Step"],
-    [methodColors["Adaptive Cloud Assistance."], "Adaptive"]
-  ];
-  methods.forEach(([color, label]) => {
+  // Colour = collaboration strategy (filled points); label inside = edge model.
+  ["Query Routing", "Per-step Routing", "Edge-Ctrl. Delegation", "Edge-Ctrl. Advisory"].forEach(method => {
+    const label = names[method];
     ctx.beginPath();
     ctx.arc(x + 6, y, 5.5, 0, Math.PI * 2);
-    ctx.fillStyle = color;
+    ctx.fillStyle = methodColors[method];
     ctx.fill();
     ctx.lineWidth = 1.5;
     ctx.strokeStyle = "#ffffff";
@@ -678,8 +772,7 @@ function drawLegend(ctx, plot) {
   });
 
   // Shape = single-side reference points.
-  ctx.beginPath();
-  ctx.arc(x + 6, y, 5, 0, Math.PI * 2);
+  roundedRect(ctx, x + 1, y - 5, 10, 10, 2.5);
   ctx.fillStyle = "#ffffff";
   ctx.fill();
   ctx.lineWidth = 1.6;
@@ -694,6 +787,17 @@ function drawLegend(ctx, plot) {
   drawStar(ctx, x + 6, y, 6, groupColors["Cloud-only"]);
   ctx.fillStyle = "rgba(60, 71, 66, 0.9)";
   ctx.fillText(t("legCloud"), x + 15, y);
+  x += 15 + ctx.measureText(t("legCloud")).width + 14;
+
+  ctx.strokeStyle = "rgba(60, 71, 66, 0.55)";
+  ctx.lineWidth = 1.4;
+  ctx.setLineDash([5, 4]);
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + 20, y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillText(t("legInterp"), x + 26, y);
 
   ctx.restore();
 }
@@ -708,18 +812,20 @@ function handlePlotHover(event) {
   const sy = (state.plotH || rect.height) / rect.height;
   const mx = dispX * sx;
   const my = dispY * sy;
-  const hit = state.points.find(point => Math.hypot(mx - point.x, my - point.y) <= Math.max(point.radius, 13) + 3);
+  // Last-drawn point is on top, so search from the end.
+  const hit = [...state.points].reverse()
+    .find(point => Math.hypot(mx - point.x, my - point.y) <= Math.max(point.radius, 13) + 3);
   if (!hit) { hideTooltip(); return; }
   const tooltip = document.getElementById("plot-tooltip");
   const item = hit.item;
   tooltip.style.display = "block";
-  tooltip.style.left = `${Math.min(dispX + 16, rect.width - 210)}px`;
+  tooltip.style.left = `${Math.min(dispX + 16, rect.width - 230)}px`;
   tooltip.style.top = `${Math.max(dispY - 10, 8)}px`;
   tooltip.innerHTML = `
-    <strong>${cleanMethod(item.method)}</strong><br>
+    <strong>${methodLabel(item.method)}</strong><br>
     <span style="opacity:.75">${item.model}</span><br>
     ${t("tipCompletion")}: ${format.percent(item.completion)}% &nbsp;·&nbsp; Pass³: ${format.percent(item.pass3)}%<br>
-    ${t("tipCost")}: ${format.money(item.cloudCost)} &nbsp;·&nbsp; ${t("tipPrivacy")}: ${format.percent(item.privacy)}%
+    ${t("tipCost")}: ${item.group === "Edge-only" ? "–" : format.money(item.cloudCost)} &nbsp;·&nbsp; ${t("tipExposure")}: ${format.percent(item.privacyExposure)}%
   `;
 }
 
@@ -733,8 +839,8 @@ function hideTooltip() {
    because the hiding rule only applies to .reveal (added here) under html.js-reveal. */
 function setupReveal() {
   const selectors = [
-    ".section-head", ".tldr-card", ".metric-band", ".wide-figure", ".axis-card",
-    ".taxonomy", ".problem-card", ".strategy-col", ".plot-card", ".finding",
+    ".section-head", ".tldr-card", ".metric-band", ".compare-shell", ".axis-card",
+    ".taxonomy", ".problem-card", ".strategy-col", ".plot-card", ".finding", ".fig-pair",
     ".findings-footnote", ".leaderboard-toolbar", ".table-shell", ".leaderboard-note",
     ".resource-card", ".citation-card"
   ];

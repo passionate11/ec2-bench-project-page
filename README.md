@@ -1,50 +1,57 @@
-# ACE-BENCH — Project Page
+# EC²-Bench — Project Page
 
 Academic project page for **“Empowering Edge Agents: A Systematic Analysis of
-Edge-Cloud Collaboration in LLM Agent Execution.”**
+Edge-Cloud Collaboration in LLM Agent Execution”** (EC²-Bench, formerly AceBench).
 
 The page is a single static `index.html` that tells the paper's story top to bottom:
 
-1. **Hero** — title, authors, action buttons, one-paragraph thesis, and the teaser
-   trade-off figure (Figure 1 from the paper).
-2. **TL;DR** — four key takeaways.
-3. **Problem** — why neither edge-only nor cloud-only execution is enough, and what
-   prior benchmarks missed.
-4. **Benchmark** — what ACE-BENCH is, the three evaluation axes, and the pipeline
-   figure (Figure 2 from the paper).
-5. **Strategies** — the six execution strategies, grouped by *when* the cloud participates.
-6. **Findings** — an interactive utility–cost–privacy scatter plot plus three findings.
-7. **Leaderboard** — sortable results table.
+1. **Hero** — title, authors, action buttons, one-paragraph thesis, and the overview
+   figure (Figure 1 from the paper).
+2. **Takeaways** — four key findings.
+3. **Leaderboard** — sortable / filterable results table (main GLM-5.3 setting and the
+   DeepSeek-V4.1-Flash appendix setting).
+4. **Motivation** — why one-shot query routing is not enough for long-horizon agents.
+5. **Benchmark** — what EC²-Bench is, the comparison with prior benchmarks (Table 1),
+   the three evaluation axes, task categories and sources.
+6. **Strategies** — the two baselines and four collaboration strategies, grouped by
+   *who decides* when the cloud participates.
+7. **Findings** — an interactive completion vs. cost / privacy-exposure plot, the three
+   RQ findings, and Figures 3–4 from the paper.
 8. **Resources & Citation**.
 
 ## Local preview
 
 ```bash
 python3 -m http.server 8080
-# open http://localhost:8080
+# open http://localhost:8080          (append ?lang=en or ?lang=zh to force a language)
 ```
 
 ## Editing content
 
-- **Results / leaderboard / plot** — all driven by `data/results.json`. Add or edit a
-  row there; the table and the trade-off plot update automatically. Sort defaults to
-  Completion while keeping cost and privacy in view.
-- **Figures** — `assets/figures/fig1-tradeoff.png`, `fig2-pipeline.png`,
-  `fig3-pareto.png` are cropped directly from the paper PDF (300 DPI).
-- **Copy / narrative** — edit `index.html` sections directly.
+- **Results / leaderboard / plot** — all driven by `data/results.json`. Each row has a
+  `suite` (`glm` = paper Table 2, `dsflash` = Table 11, `both` = shared rows such as
+  edge-only). `privacyExposure` is the share of sensitive units exposed to the cloud
+  (**lower is better**). The table and plot (axis ranges included) update automatically.
+- **Figures** — `assets/figures/` holds PNGs rendered from the paper's figure PDFs:
+  `fig1-overview.png` (Figure 1), `fig2a-cost.png` (Figure 2a, no-JS fallback),
+  `fig3a/b-*.png` (Figure 3), `fig4a/b-*.png` (Figure 4).
+- **Copy / narrative** — edit `index.html` sections directly. Every translatable node has
+  a `data-i18n` key; its Chinese text lives in `I18N_ZH` in `assets/app.js` — update both.
 - **Design tokens** — colors, spacing, and fonts live in the `:root` block of
   `assets/styles.css`. The three axes are color-coded consistently
-  (utility = green, cost = amber, privacy = indigo).
+  (performance = green, resource = amber, privacy = indigo).
+- **Cache busting** — after editing CSS / JS / data, bump the `?v=` query strings in
+  `index.html` and `dataVersion` in `assets/app.js`.
 
 ## Notes before publishing
 
-- `paper.pdf` is the full submission. Remove it (and the two “Paper (PDF)” links in
-  `index.html`) if you do not want the PDF public while under review.
-- The hero tag reads “Benchmark & Analysis · 2026”; update it to the venue once accepted.
+- `paper.pdf` is the full paper. Remove it (and the “Paper (PDF)” links in `index.html`)
+  if you do not want the PDF public.
+- The hero tag reads “Benchmark & Empirical Study · 2026”; update it to the venue once accepted.
 - In `index.html` `<head>` there is a commented block with `canonical` / `og:image` /
-  `twitter:image` tags — uncomment it and replace `YOUR-USER` with the final GitHub Pages
-  URL so social link-previews render an image.
-- The `<a href="https://github.com/OpenBMB/AceBench">` links and the BibTeX `url` point at
+  `twitter:image` tags — uncomment it and fill in the final GitHub Pages URL so social
+  link-previews render an image.
+- The `<a href="https://github.com/OpenBMB/EC2-Bench">` links and the BibTeX `url` point at
   the public repo — update if the canonical location changes.
 
 ## Deployment (GitHub Pages)
