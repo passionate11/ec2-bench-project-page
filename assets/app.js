@@ -99,11 +99,9 @@ const I18N_ZH = {
   "bench.cov4": "开发与运维 · 14",
   "bench.cov5": "数据分析 · 13",
   "bench.cov6": "自动化 · 10",
-  "bench.sources": "任务来源",
-  "bench.srcCurated": "自建 · 7",
   "bench.cmpH": `EC²-Bench 与以往基准的区别`,
 
-  "strat.kicker": "协同策略",
+  "strat.kicker": "所评估的协同策略",
   "strat.h2": "把云端引入智能体轨迹的四种方式。",
   "strat.lede": `两个单侧基线，加上四种代表性的端云协同策略。它们沿两个维度区分：<strong>由谁决定</strong>云端何时参与（外部路由器，还是端侧智能体自己），以及云端被调用后<strong>做什么</strong>（直接生成动作，还是向端侧提供建议）。`,
   "strat.col1": "单侧基线",

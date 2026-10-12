@@ -456,7 +456,6 @@ figcaption em { color: var(--ink-soft); font-style: italic; }
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
   margin-top: 36px; padding-top: 28px; border-top: 1px dashed var(--line);
 }
-.taxonomy-tight { margin-top: 16px; padding-top: 0; border-top: none; }
 .bench-sub { font-size: 17px; font-weight: 700; margin: 40px 0 14px; }
 .taxonomy-label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 .taxonomy ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 9px; }
