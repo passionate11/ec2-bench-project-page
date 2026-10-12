@@ -25,7 +25,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2l">
+    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2n">
     <script>
       (function () {
         var saved = null;
@@ -191,23 +191,22 @@
             <article class="problem-card edge">
               <span class="tier-label"><svg class="ic" aria-hidden="true"><use href="#ic-device"/></svg><span data-i18n="problem.c1tag">Edge-only</span></span>
               <h3 data-i18n="problem.c1h">Local, but limited</h3>
-              <p data-i18n="problem.c1p">Every action comes from the on-device model. Nothing is exposed, but long-horizon
-              workspace tasks hit a capability wall: Qwen3.5-2B completes only 12.75% and Qwen3.5-9B 39.12%.</p>
+              <p data-i18n="problem.c1p">Every action comes from the on-device model. Nothing leaves the device, but
+              long-horizon workspace tasks quickly hit a capability wall.</p>
               <div class="stat-row"><span class="stat-pill good" data-i18n="problem.c1pillA">0% exposure</span><span class="stat-pill warn" data-i18n="problem.c1pillB">12.75% completion (2B)</span></div>
             </article>
             <article class="problem-card cloud">
               <span class="tier-label"><svg class="ic" aria-hidden="true"><use href="#ic-cloud"/></svg><span data-i18n="problem.c2tag">Cloud-only</span></span>
               <h3 data-i18n="problem.c2h">Capable, but exposed</h3>
-              <p data-i18n="problem.c2p">GLM-5.3 drives every step and reaches the highest completion, but 87% of the annotated
-              sensitive units reach the cloud, at the highest cloud cost of all settings ($56.42).</p>
+              <p data-i18n="problem.c2p">A frontier model runs every step and completes the most tasks, but most sensitive
+              workspace data reaches the cloud, at the highest cost.</p>
               <div class="stat-row"><span class="stat-pill good" data-i18n="problem.c2pillA">82.70% completion</span><span class="stat-pill bad" data-i18n="problem.c2pillB">87.01% exposure</span></div>
             </article>
             <article class="problem-card gap">
-              <span class="tier-label"><svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="problem.c3tag">What was missing</span></span>
-              <h3 data-i18n="problem.c3h">Prior benchmarks score one query at a time</h3>
-              <p data-i18n="problem.c3p">RouterBench, LLMRouterBench, LLMSwitchBench, and M4A1 only ask whether a single query
-              or turn should go to the edge or the cloud. None of them measures what happens across a whole agent
-              trajectory, where the cloud joins many times and each call adds cost and carries more local data away.</p>
+              <span class="tier-label"><svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="problem.c3tag">Prior benchmarks</span></span>
+              <h3 data-i18n="problem.c3h">Queries, not trajectories</h3>
+              <p data-i18n="problem.c3p">RouterBench, M4A1 and others only route a single query or turn. Cost and leakage
+              that build up over a whole agent trajectory go unmeasured.</p>
               <div class="stat-row"><span class="stat-pill neutral" data-i18n="problem.c3pill">trajectory-level evaluation needed</span></div>
             </article>
           </div>

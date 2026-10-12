@@ -362,6 +362,7 @@ figcaption em { color: var(--ink-soft); font-style: italic; }
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
 }
 .problem-card {
+  display: flex; flex-direction: column;
   background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius);
   padding: 26px 24px; box-shadow: var(--shadow-sm);
   transition: transform .14s ease, box-shadow .14s ease;
@@ -370,7 +371,7 @@ figcaption em { color: var(--ink-soft); font-style: italic; }
 .tier-label {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 12.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
-  padding: 5px 11px; border-radius: 999px; margin-bottom: 14px;
+  padding: 5px 11px; border-radius: 999px; margin-bottom: 14px; align-self: flex-start;
 }
 .tier-label .ic { font-size: 15px; stroke-width: 1.9; }
 .problem-card.edge  .tier-label { color: var(--edge);  background: #e8f0fe; }
@@ -379,7 +380,7 @@ figcaption em { color: var(--ink-soft); font-style: italic; }
 .problem-card h3 { font-size: 19px; font-weight: 700; margin-bottom: 10px; }
 .problem-card p { font-size: 14.5px; color: var(--ink-soft); line-height: 1.58; }
 .problem-card em { font-style: italic; }
-.stat-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.stat-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 18px; }
 .stat-pill {
   font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 7px;
   background: var(--line-soft); color: var(--ink-soft);
@@ -394,7 +395,7 @@ figcaption em { color: var(--ink-soft); font-style: italic; }
 /* Research questions under the motivation cards */
 .rq-strip { margin-top: 28px; }
 .rq-strip-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
-.rq-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.rq-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .rq-items li {
   display: flex; gap: 12px; align-items: flex-start; background: var(--bg); border: 1px solid var(--line);
   border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow-sm);
