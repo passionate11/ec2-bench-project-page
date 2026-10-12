@@ -85,7 +85,7 @@ const I18N_ZH = {
   "problem.c1pillB": "完成度 12.75%（2B）",
   "problem.c2tag": "仅云端",
   "problem.c2h": "强大，但暴露",
-  "problem.c2p": `GLM-5.3 驱动每一步，完成度最高；但 87% 的标注敏感单元会到达云端，跑完整个任务集要花 $56.42。`,
+  "problem.c2p": `GLM-5.3 驱动每一步，完成度最高；但 87% 的标注敏感单元会到达云端，云成本也是所有设置中最高的（$56.42）。`,
   "problem.c2pillA": "完成度 82.70%",
   "problem.c2pillB": "暴露 87.01%",
   "problem.c3tag": "此前缺失的",
@@ -540,8 +540,15 @@ function xValue(item) {
   return state.xAxis === "exposure" ? item.privacyExposure : item.cloudCost;
 }
 
+/* In cost mode, a secondary cloud-only baseline (e.g. DeepSeek-v4-Pro under the
+   DeepSeek-V4.1-Flash setting) can sit far right of everything else; keep it out of
+   the range and pin it to the right edge instead. */
+function inRange(item) {
+  return state.xAxis !== "cost" || item.group !== "Cloud-only" || item.cloudModel === SUITE_CLOUD[state.suite];
+}
+
 function plotRanges(rows) {
-  const xs = rows.map(xValue);
+  const xs = rows.filter(inRange).map(xValue);
   const ys = rows.map(r => r.completion);
   const xMaxRaw = state.xAxis === "exposure" ? 100 : Math.max(...xs);
   const xStep = niceStep(xMaxRaw, 5);
@@ -577,7 +584,7 @@ function renderTradeoff() {
   const plot = { x: margin.left, y: margin.top, w: W - margin.left - margin.right, h: H - margin.top - margin.bottom };
   const R = plotRanges(rows);
   const pos = item => ({
-    x: plot.x + ((xValue(item) - R.xMin) / (R.xMax - R.xMin)) * plot.w,
+    x: Math.min(plot.x + ((xValue(item) - R.xMin) / (R.xMax - R.xMin)) * plot.w, plot.x + plot.w - 10),
     y: plot.y + (1 - ((item.completion - R.yMin) / (R.yMax - R.yMin))) * plot.h
   });
 
@@ -741,8 +748,9 @@ function drawCloudLabels(ctx, points) {
   ctx.fillStyle = "rgba(60, 71, 66, 0.82)";
   points.filter(p => p.item.group === "Cloud-only").forEach(({ item, x, y, radius }) => {
     const right = x > (state.plotW || 800) * 0.8;
+    const label = inRange(item) ? item.cloudModel : `${item.cloudModel} (${format.money(item.cloudCost)}) →`;
     ctx.textAlign = right ? "right" : "left";
-    ctx.fillText(item.cloudModel, right ? x - radius - 10 : x + radius + 10, y);
+    ctx.fillText(label, right ? x - radius - 10 : x + radius + 10, y);
   });
   ctx.restore();
 }
