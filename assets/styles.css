@@ -218,8 +218,18 @@ p { margin: 0; }
   font-size: 14px; color: var(--muted);
 }
 .affil-list sup { color: var(--brand-deep); }
-.corr-note { font-size: 13px; color: var(--muted); margin-bottom: 26px; }
+.corr-note { font-size: 13px; color: var(--muted); margin: 0; }
 .corr-note span { color: var(--brand-deep); }
+.hero-title { margin-bottom: 30px; }
+
+/* Authors (bottom of the page) */
+.authors-block {
+  margin-top: 24px; padding: 22px 26px;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.authors-block h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.authors-block .author-list { justify-content: flex-start; font-size: 15.5px; margin-bottom: 8px; }
+.authors-block .affil-list { justify-content: flex-start; font-size: 13.5px; margin-bottom: 4px; }
 
 .hero-actions {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;

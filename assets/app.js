@@ -32,10 +32,6 @@ const I18N_ZH = {
 
   "hero.venue": "基准与实证研究 · 2026",
   "hero.title": `赋能端侧智能体：大模型智能体执行中<br><span class="title-accent">端云协同</span>的系统性分析`,
-  "hero.affil1": `<sup>1</sup> 东北大学，沈阳`,
-  "hero.affil2": `<sup>2</sup> 清华大学，北京`,
-  "hero.affil3": `<sup>3</sup> 中国移动在线服务有限公司，北京`,
-  "hero.corr": `<span>*</span> 通讯作者`,
   "hero.btnCode": "代码与数据",
   "hero.btnPaper": "论文 (PDF)",
   "hero.btnLeaderboard": "排行榜",
@@ -177,6 +173,12 @@ const I18N_ZH = {
   "res.c2p": "问题形式化、任务构建、隐私标注与验证，以及完整的实证研究。",
   "res.c2go": "阅读 PDF",
   "res.copy": "复制",
+
+  "authors.h": "作者",
+  "authors.affil1": `<sup>1</sup> 东北大学，沈阳`,
+  "authors.affil2": `<sup>2</sup> 清华大学，北京`,
+  "authors.affil3": `<sup>3</sup> 中国移动在线服务有限公司，北京`,
+  "authors.corr": `<span>*</span> 通讯作者`,
 
   "footer.tagline": "长程大模型智能体执行中的端云协同。"
 };
@@ -850,7 +852,7 @@ function setupReveal() {
     ".section-head", ".tldr-card", ".metric-band", ".compare-shell", ".axis-card",
     ".taxonomy", ".problem-card", ".strategy-col", ".plot-card", ".finding", ".fig-pair",
     ".findings-footnote", ".leaderboard-toolbar", ".table-shell", ".leaderboard-note",
-    ".resource-card", ".citation-card"
+    ".resource-card", ".citation-card", ".authors-block"
   ];
   const els = [];
   selectors.forEach(sel => document.querySelectorAll(sel).forEach(el => {

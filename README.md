@@ -1,10 +1,9 @@
 # EC²-Bench — Project Page
 
 Academic project page for **“Empowering Edge Agents: A Systematic Analysis of
-Edge-Cloud Collaboration in LLM Agent Execution”** (EC²-Bench, formerly AceBench).
+Edge-Cloud Collaboration in LLM Agent Execution”** (EC²-Bench).
 
-Live at **https://passionate11.github.io/ec2-bench-project-page/** (this repo was renamed from `ace-bench-project-page`;
-GitHub Pages URLs do not redirect, so the old `…/ace-bench-project-page/` address no longer works).
+Live at **https://passionate11.github.io/ec2-bench-project-page/**.
 
 The page is a single static `index.html` that tells the paper's story top to bottom:
 
