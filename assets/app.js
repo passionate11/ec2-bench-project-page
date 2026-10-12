@@ -31,7 +31,11 @@ const I18N_ZH = {
   "hero.venue": "基准与实证研究 · 2026",
   "hero.titleMain": "赋能端侧智能体",
   "hero.titleSub": `大模型智能体执行中<span class="title-accent">端云协同</span>的系统性分析`,
-  "hero.tagline": "128 个可执行任务 · 4 种协同策略 · 任务表现、资源用量与隐私暴露",
+  "hero.lede": `当大模型智能体在本地工作区执行长程任务时，云端协助不再是一次性的路由决策，而是穿插在整条执行轨迹之中。<strong>EC²-Bench</strong> 在 128 个可执行任务上评估四种端云协同策略，同时衡量任务表现、资源用量与隐私暴露。`,
+  "hero.s1": "可执行任务",
+  "hero.s2": "隐私标注任务",
+  "hero.s3": "敏感信息单元",
+  "hero.s4": "协同策略",
   "hero.btnCode": "代码与数据",
   "hero.btnPaper": "论文 (PDF)",
   "hero.btnResults": "主实验结果",
@@ -71,10 +75,6 @@ const I18N_ZH = {
   "bench.kicker": "基准",
   "bench.h2": "EC²-Bench：在整条轨迹上评估端云协同。",
   "bench.lede": `EC²-Bench（<strong>E</strong>dge–<strong>C</strong>loud <strong>C</strong>ollaborative Agent Benchmark，端云协同智能体基准）。128 个可执行的数字工作区任务，整理自六个智能体基准，统一适配到同一个 OpenClaw 运行时，并经过筛选，确保仅端侧、仅云端与协同执行之间确实会拉开差距。其中 100 个任务带有细粒度敏感信息标注，轨迹上云端看到的每一段上下文都可以被审计。`,
-  "bench.m1": "可执行任务",
-  "bench.m2": "隐私标注任务",
-  "bench.m3": "敏感信息单元",
-  "bench.m4": "协同策略",
   "bench.tBench": "基准",
   "bench.tScenario": "评估场景",
   "bench.tModes": "协同模式",
@@ -752,7 +752,7 @@ function hideTooltip() {
    because the hiding rule only applies to .reveal (added here) under html.js-reveal. */
 function setupReveal() {
   const selectors = [
-    ".section-head", ".tldr-card", ".metric-band", ".compare-shell", ".axis-card",
+    ".section-head", ".tldr-card", ".hstat", ".compare-shell", ".axis-card",
     ".taxonomy", ".problem-card", ".strategy-col", ".plot-card", ".finding", ".fig-pair",
     ".findings-footnote", ".table-shell", ".wide-figure",
     ".resource-card", ".citation-card", ".authors-block"

@@ -25,7 +25,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2e">
+    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2g">
     <script>
       (function () {
         var saved = null;
@@ -88,29 +88,35 @@
     <main id="top">
       <!-- ============================ HERO ============================ -->
       <section class="hero">
-        <div class="hero-shell">
-          <p class="hero-venue" data-i18n="hero.venue">Benchmark &amp; Empirical Study · 2026</p>
-          <h1 class="hero-title">
-            <span class="title-main" data-i18n="hero.titleMain">Empowering Edge Agents</span>
-            <span class="title-sub" data-i18n="hero.titleSub">A Systematic Analysis of <span class="title-accent">Edge-Cloud Collaboration</span> in LLM Agent Execution</span>
-          </h1>
-          <p class="hero-tagline" data-i18n="hero.tagline">128 executable tasks · 4 collaboration strategies · performance, resource usage &amp; privacy exposure</p>
-
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="https://github.com/OpenBMB/EC2-Bench" target="_blank" rel="noopener">
-              <svg class="ic" aria-hidden="true"><use href="#ic-code"/></svg><span data-i18n="hero.btnCode">Code &amp; Data</span>
-            </a>
-            <a class="btn" href="paper.pdf" target="_blank" rel="noopener">
-              <svg class="ic" aria-hidden="true"><use href="#ic-doc"/></svg><span data-i18n="hero.btnPaper">Paper (PDF)</span>
-            </a>
-            <a class="btn" href="#results">
-              <svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="hero.btnResults">Results</span>
-            </a>
-            <a class="btn" href="#citation">
-              <svg class="ic" aria-hidden="true"><use href="#ic-tag"/></svg><span data-i18n="hero.btnBibtex">BibTeX</span>
-            </a>
+        <div class="hero-shell hero-grid">
+          <div class="hero-copy">
+            <p class="hero-venue" data-i18n="hero.venue">Benchmark &amp; Empirical Study · 2026</p>
+            <h1 class="hero-title">
+              <span class="title-main" data-i18n="hero.titleMain">Empowering Edge Agents</span>
+              <span class="title-sub" data-i18n="hero.titleSub">A Systematic Analysis of <span class="title-accent nowrap">Edge-Cloud Collaboration</span> in LLM Agent Execution</span>
+            </h1>
+            <p class="hero-lede" data-i18n="hero.lede">When LLM agents take on long-horizon work in local workspaces, cloud help is interleaved throughout the trajectory. <strong>EC²-Bench</strong> evaluates four edge–cloud collaboration strategies on 128 executable tasks, jointly measuring task performance, resource usage, and privacy exposure.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="https://github.com/OpenBMB/EC2-Bench" target="_blank" rel="noopener">
+                <svg class="ic" aria-hidden="true"><use href="#ic-code"/></svg><span data-i18n="hero.btnCode">Code &amp; Data</span>
+              </a>
+              <a class="btn" href="paper.pdf" target="_blank" rel="noopener">
+                <svg class="ic" aria-hidden="true"><use href="#ic-doc"/></svg><span data-i18n="hero.btnPaper">Paper (PDF)</span>
+              </a>
+              <a class="btn" href="#results">
+                <svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="hero.btnResults">Results</span>
+              </a>
+              <a class="btn" href="#citation">
+                <svg class="ic" aria-hidden="true"><use href="#ic-tag"/></svg><span data-i18n="hero.btnBibtex">BibTeX</span>
+              </a>
+            </div>
           </div>
-
+          <ul class="hero-stats" aria-label="Benchmark at a glance">
+            <li class="hstat"><svg class="ic" aria-hidden="true"><use href="#ic-folder"/></svg><strong id="task-count">128</strong><span data-i18n="hero.s1">executable tasks</span></li>
+            <li class="hstat"><svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg><strong id="privacy-task-count">100</strong><span data-i18n="hero.s2">privacy-annotated tasks</span></li>
+            <li class="hstat"><svg class="ic" aria-hidden="true"><use href="#ic-tag"/></svg><strong id="unit-count">3,385</strong><span data-i18n="hero.s3">sensitivity units</span></li>
+            <li class="hstat"><svg class="ic" aria-hidden="true"><use href="#ic-route"/></svg><strong id="strategy-count">4</strong><span data-i18n="hero.s4">collaboration strategies</span></li>
+          </ul>
         </div>
 
         <figure class="hero-figure">
@@ -218,13 +224,6 @@
               that edge-only, cloud-only, and collaborative execution can actually differ. 100 tasks carry fine-grained
               sensitivity annotations, so every context the cloud sees along a trajectory can be audited.
             </p>
-          </div>
-
-          <div class="metric-band" aria-label="Benchmark at a glance">
-            <div class="metric"><strong id="task-count">128</strong><span data-i18n="bench.m1">executable tasks</span></div>
-            <div class="metric"><strong id="privacy-task-count">100</strong><span data-i18n="bench.m2">privacy-annotated tasks</span></div>
-            <div class="metric"><strong id="unit-count">3,385</strong><span data-i18n="bench.m3">sensitivity units</span></div>
-            <div class="metric"><strong id="strategy-count">4</strong><span data-i18n="bench.m4">collaboration strategies</span></div>
           </div>
 
           <div class="table-shell compare-shell">
@@ -591,6 +590,6 @@
       </div>
     </footer>
 
-    <script src="assets/app.js?v=20261012-ec2e"></script>
+    <script src="assets/app.js?v=20261012-ec2f"></script>
   </body>
 </html>
