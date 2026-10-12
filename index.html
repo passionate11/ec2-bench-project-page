@@ -25,7 +25,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2c">
+    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2d">
     <script>
       (function () {
         var saved = null;
@@ -70,10 +70,10 @@
           <span class="brand-text">EC²-<strong>Bench</strong></span>
         </a>
         <nav class="nav-links" aria-label="Primary navigation">
-          <a href="#leaderboard" data-i18n="nav.leaderboard">Leaderboard</a>
           <a href="#problem" data-i18n="nav.problem">Motivation</a>
           <a href="#benchmark" data-i18n="nav.benchmark">Benchmark</a>
           <a href="#strategies" data-i18n="nav.strategies">Strategies</a>
+          <a href="#results" data-i18n="nav.results">Results</a>
           <a href="#findings" data-i18n="nav.findings">Findings</a>
         </nav>
         <button class="lang-toggle" type="button" id="lang-toggle" aria-label="切换语言 / Switch language">
@@ -102,8 +102,8 @@
             <a class="btn" href="paper.pdf" target="_blank" rel="noopener">
               <svg class="ic" aria-hidden="true"><use href="#ic-doc"/></svg><span data-i18n="hero.btnPaper">Paper (PDF)</span>
             </a>
-            <a class="btn" href="#leaderboard">
-              <svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="hero.btnLeaderboard">Leaderboard</span>
+            <a class="btn" href="#results">
+              <svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="hero.btnResults">Results</span>
             </a>
             <a class="btn" href="#citation">
               <svg class="ic" aria-hidden="true"><use href="#ic-tag"/></svg><span data-i18n="hero.btnBibtex">BibTeX</span>
@@ -111,12 +111,10 @@
           </div>
 
           <p class="hero-thesis" data-i18n="hero.thesis">
-            As LLM agents take on long-horizon work inside local digital workspaces, cloud help stops being a one-shot
-            routing decision per query: it becomes <strong>interleaved throughout the execution trajectory</strong>,
-            and every cloud call can carry accumulated workspace context off the device. <strong>EC²-Bench</strong>
-            makes these trajectory-level effects measurable, scoring four representative collaboration strategies on
-            128 executable workspace tasks across <em>task performance</em>, <em>resource usage</em>, and
-            <em>privacy exposure</em> at once.
+            When LLM agents run long-horizon tasks in local workspaces, cloud help is no longer a one-shot routing
+            decision: it is interleaved throughout the execution trajectory. <strong class="nowrap">EC²-Bench</strong>
+            measures what that means for task performance, resource usage, and privacy exposure, across four
+            collaboration strategies and 128 executable tasks.
           </p>
         </div>
 
@@ -170,87 +168,8 @@
         </div>
       </section>
 
-      <!-- ============================ LEADERBOARD ============================ -->
-      <section id="leaderboard" class="section section-soft">
-        <div class="content-shell">
-          <div class="section-head bare-head">
-            <span class="kicker" data-i18n="lb.kicker">Leaderboard</span>
-            <h2 class="sr-only" data-i18n="lb.kicker">Leaderboard</h2>
-          </div>
-
-          <div class="leaderboard-toolbar">
-            <div class="lb-filters">
-              <label class="lb-filter">
-                <span data-i18n="lb.suiteLabel">Cloud model</span>
-                <select id="suite-filter">
-                  <option value="glm" data-i18n="lb.optGlm">GLM-5.3 (main)</option>
-                  <option value="dsflash" data-i18n="lb.optDs">DeepSeek-V4.1-Flash (appendix)</option>
-                </select>
-              </label>
-              <label class="lb-filter">
-                <span data-i18n="lb.filterLabel">Strategy family</span>
-                <select id="group-filter">
-                  <option value="all" data-i18n="lb.optAll">All strategies</option>
-                  <option value="Edge-only" data-i18n="lb.optEdge">Edge-only</option>
-                  <option value="Cloud-only" data-i18n="lb.optCloud">Cloud-only</option>
-                  <option value="Edge-Cloud" data-i18n="lb.optEdgeCloud">Edge-cloud collaboration</option>
-                </select>
-              </label>
-              <label class="lb-filter">
-                <span data-i18n="lb.edgeLabel">Edge model</span>
-                <select id="edge-filter">
-                  <option value="all" data-i18n="lb.optAllEdge">All edge models</option>
-                  <option value="Qwen3.5-2B">Qwen3.5-2B</option>
-                  <option value="Qwen3.5-9B">Qwen3.5-9B</option>
-                  <option value="Qwen3.5-27B">Qwen3.5-27B</option>
-                  <option value="Qwen3.7-Plus">Qwen3.7-Plus</option>
-                </select>
-              </label>
-            </div>
-            <div class="leaderboard-tabs" aria-label="Sort by axis">
-              <button class="active" type="button" data-sort="completion" aria-pressed="true">
-                <svg class="ic" aria-hidden="true"><use href="#ic-target"/></svg><span data-i18n="lb.sortCompletion">Completion ↑</span>
-              </button>
-              <button type="button" data-sort="exposureAsc" aria-pressed="false">
-                <svg class="ic" aria-hidden="true"><use href="#ic-shield"/></svg><span data-i18n="lb.sortExposure">Privacy exp. ↓</span>
-              </button>
-              <button type="button" data-sort="cloudCostAsc" aria-pressed="false">
-                <svg class="ic" aria-hidden="true"><use href="#ic-coin"/></svg><span data-i18n="lb.sortCost">Cloud cost ↓</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="table-shell">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th data-i18n="lb.thMethod">Method</th>
-                  <th data-i18n="lb.thCompletion">Completion ↑</th>
-                  <th><span data-i18n="lb.thPass">Pass</span><sup>3</sup> ↑</th>
-                  <th data-i18n="lb.thExposure">Privacy Exp. ↓</th>
-                  <th data-i18n="lb.thCost">Cloud Cost ↓</th>
-                </tr>
-              </thead>
-              <tbody id="leaderboard-body"></tbody>
-            </table>
-          </div>
-          <noscript>
-            <p class="leaderboard-note">The interactive leaderboard needs JavaScript. With it disabled, see Table 2 of the paper (and Table 11 for the DeepSeek-V4.1-Flash cloud setting) for the full numbers.</p>
-          </noscript>
-          <p class="leaderboard-note" data-i18n="lb.note">
-            Main setting uses GLM-5.3 as the cloud model (paper Table 2); the appendix setting swaps in DeepSeek-V4.1-Flash
-            (Table 11). Each row lists its edge / cloud models, cloud tokens (raw&nbsp;/&nbsp;cache-read&nbsp;/&nbsp;output,
-            millions), and edge FLOPs (PetaFLOPs; not reported for Qwen3.7-Plus, whose parameter count is unavailable).
-            Results are averaged over 3 runs; Pass<sup>3</sup> counts tasks solved (score&nbsp;&gt;&nbsp;0.7) in all three.
-            Privacy exposure is the share of annotated sensitive units visible to the cloud, on the 100 annotated tasks:
-            <strong>lower is better</strong>.
-          </p>
-        </div>
-      </section>
-
       <!-- ============================ PROBLEM ============================ -->
-      <section id="problem" class="section">
+      <section id="problem" class="section section-soft">
         <div class="content-shell">
           <div class="section-head">
             <span class="kicker" data-i18n="problem.kicker">Motivation</span>
@@ -293,7 +212,7 @@
       </section>
 
       <!-- ============================ BENCHMARK ============================ -->
-      <section id="benchmark" class="section section-soft">
+      <section id="benchmark" class="section">
         <div class="content-shell">
           <div class="section-head">
             <span class="kicker" data-i18n="bench.kicker">Benchmark</span>
@@ -386,7 +305,7 @@
       </section>
 
       <!-- ============================ STRATEGIES ============================ -->
-      <section id="strategies" class="section">
+      <section id="strategies" class="section section-soft">
         <div class="content-shell">
           <div class="section-head">
             <span class="kicker" data-i18n="strat.kicker">Collaboration Strategies</span>
@@ -462,6 +381,25 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ============================ MAIN RESULTS ============================ -->
+      <section id="results" class="section">
+        <div class="content-shell">
+          <div class="section-head">
+            <span class="kicker" data-i18n="results.kicker">Main Results</span>
+            <h2 data-i18n="results.h2">Task performance, resource usage, and privacy exposure on EC²-Bench.</h2>
+          </div>
+          <figure class="wide-figure results-figure">
+            <img src="assets/figures/table2-main-results.png" width="1400" height="1040" loading="lazy" decoding="async" alt="Paper Table 2: completion, Pass³, cloud tokens, cloud cost, edge FLOPs, and privacy exposure for edge-only (Qwen3.5-2B/9B/27B, Qwen3.7-Plus), cloud-only (DeepSeek-v4-Pro, GLM-5.3), and the four collaboration strategies under each edge model, with GLM-5.3 as the cloud model.">
+            <figcaption data-i18n="results.caption">
+              <strong>Main results (paper Table 2).</strong> Cloud model: GLM-5.3; each configuration is averaged over 3 runs.
+              Cloud Tok. (R/C/O) = raw input / cache-read / output tokens in millions; cloud cost in USD; edge FLOPs in
+              PetaFLOPs. Privacy exposure is the share of annotated sensitive units visible to the cloud (lower is better).
+              Results with DeepSeek-V4.1-Flash as the cloud model are in Appendix A.8 of the paper.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
@@ -648,16 +586,16 @@
           </div>
         </div>
         <nav class="footer-links" aria-label="Footer">
-          <a href="#leaderboard" data-i18n="nav.leaderboard">Leaderboard</a>
           <a href="#problem" data-i18n="nav.problem">Motivation</a>
           <a href="#benchmark" data-i18n="nav.benchmark">Benchmark</a>
           <a href="#strategies" data-i18n="nav.strategies">Strategies</a>
+          <a href="#results" data-i18n="nav.results">Results</a>
           <a href="#findings" data-i18n="nav.findings">Findings</a>
           <a href="https://github.com/OpenBMB/EC2-Bench" target="_blank" rel="noopener">GitHub</a>
         </nav>
       </div>
     </footer>
 
-    <script src="assets/app.js?v=20261012-ec2c"></script>
+    <script src="assets/app.js?v=20261012-ec2d"></script>
   </body>
 </html>

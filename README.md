@@ -7,19 +7,17 @@ Live at **https://passionate11.github.io/ec2-bench-project-page/**.
 
 The page is a single static `index.html` that tells the paper's story top to bottom:
 
-1. **Hero** — title, authors, action buttons, one-paragraph thesis, and the overview
-   figure (Figure 1 from the paper).
+1. **Hero** — title, action buttons, a short thesis, and the overview figure (Figure 1).
 2. **Takeaways** — four key findings.
-3. **Leaderboard** — sortable / filterable results table (main GLM-5.3 setting and the
-   DeepSeek-V4.1-Flash appendix setting).
-4. **Motivation** — why one-shot query routing is not enough for long-horizon agents.
-5. **Benchmark** — what EC²-Bench is, the comparison with prior benchmarks (Table 1),
+3. **Motivation** — why one-shot query routing is not enough for long-horizon agents.
+4. **Benchmark** — what EC²-Bench is, the comparison with prior benchmarks (Table 1),
    the three evaluation axes, task categories and sources.
-6. **Strategies** — the two baselines and four collaboration strategies, grouped by
+5. **Strategies** — the two baselines and four collaboration strategies, grouped by
    *who decides* when the cloud participates.
+6. **Main Results** — a screenshot of the paper's Table 2.
 7. **Findings** — an interactive completion vs. cost / privacy-exposure plot, the three
    RQ findings, and Figures 3–4 from the paper.
-8. **Resources & Citation**.
+8. **Resources & Citation**, then **Authors** at the bottom.
 
 ## Local preview
 
@@ -30,10 +28,12 @@ python3 -m http.server 8080
 
 ## Editing content
 
-- **Results / leaderboard / plot** — all driven by `data/results.json`. Each row has a
-  `suite` (`glm` = paper Table 2, `dsflash` = Table 11, `both` = shared rows such as
-  edge-only). `privacyExposure` is the share of sensitive units exposed to the cloud
-  (**lower is better**). The table and plot (axis ranges included) update automatically.
+- **Main results** — `assets/figures/table2-main-results.png` is cropped from the paper PDF
+  (`tools/crop_table.py` in the build folder); re-crop it whenever Table 2 changes.
+- **Trade-off plot** — driven by `data/results.json`. Each row has a `suite` (`glm` = paper
+  Table 2, `dsflash` = Table 11, `both` = shared rows such as edge-only).
+  `privacyExposure` is the share of sensitive units exposed to the cloud (**lower is better**).
+  Axis ranges update automatically.
 - **Figures** — `assets/figures/` holds PNGs rendered from the paper's figure PDFs:
   `fig1-overview.png` (Figure 1), `fig2a-cost.png` (Figure 2a, no-JS fallback),
   `fig3a/b-*-v2.png` (Figure 3, redrawn from the Table 2 numbers), `fig4a/b-*.png` (Figure 4).

@@ -254,15 +254,24 @@ p { margin: 0; }
 .btn-primary:hover { color: #fff; background: #0b1311; }
 
 .hero-thesis {
-  max-width: 800px; margin: 0 auto;
-  text-align: left;
-  font-size: 18px; line-height: 1.62; color: var(--ink-soft);
+  max-width: 760px; margin: 0 auto;
+  text-align: center;
+  font-size: 17.5px; line-height: 1.7; color: var(--ink-soft);
 }
 .hero-thesis strong { color: var(--ink); font-weight: 650; }
-.hero-thesis em { font-style: normal; font-weight: 600; }
-.hero-thesis em:nth-of-type(1) { color: var(--utility); }
-.hero-thesis em:nth-of-type(2) { color: var(--cost-text); }
-.hero-thesis em:nth-of-type(3) { color: var(--privacy); }
+.nowrap { white-space: nowrap; }
+
+/* Chinese: CJK has no true italic and the serif falls back to Songti, so use the sans stack. */
+html[data-lang="zh"] .hero-title {
+  font-family: var(--sans); font-weight: 700; font-size: clamp(24px, 3vw, 31px);
+  line-height: 1.4; letter-spacing: .02em;
+}
+html[data-lang="zh"] .title-accent { font-style: normal; }
+html[data-lang="zh"] .section-head h2 {
+  font-family: var(--sans); font-weight: 700; font-size: clamp(22px, 2.8vw, 28px); letter-spacing: .01em;
+}
+html[data-lang="zh"] .hero-venue, html[data-lang="zh"] .kicker { letter-spacing: .08em; }
+html[data-lang="zh"] .hero-thesis { font-size: 17px; line-height: 1.8; }
 
 /* Hero figure */
 .hero-figure {
@@ -561,18 +570,8 @@ figcaption em { color: var(--ink-soft); font-style: italic; }
 
 @media (max-width: 920px) { .finding-list { grid-template-columns: 1fr; } }
 
-/* ============================ LEADERBOARD ============================ */
-.leaderboard-toolbar {
-  display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between;
-  margin-bottom: 18px;
-}
-.lb-filters { display: flex; flex-wrap: wrap; gap: 12px; }
-.lb-filter { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
-.lb-filter select {
-  font-family: var(--sans); font-size: 14px; color: var(--ink);
-  padding: 9px 14px; border: 1px solid var(--line); border-radius: 9px; background: #fff;
-  box-shadow: var(--shadow-sm); cursor: pointer; min-width: 180px;
-}
+/* ============================ TABS + TABLES ============================ */
+/* Segmented tab group (used by the trade-off plot controls). */
 .leaderboard-tabs { display: flex; flex-wrap: wrap; gap: 6px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: 11px; padding: 4px; }
 .leaderboard-tabs button {
   display: inline-flex; align-items: center; gap: 6px;
@@ -584,55 +583,25 @@ figcaption em { color: var(--ink-soft); font-style: italic; }
 .leaderboard-tabs button:hover { color: var(--ink); }
 .leaderboard-tabs button.active { background: #fff; color: var(--ink); box-shadow: var(--shadow-sm); }
 
+/* Generic table shell (used by the benchmark comparison table). */
 .table-shell {
   border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
   box-shadow: var(--shadow-sm); background: #fff;
   overflow-x: auto;
 }
-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+table { width: 100%; border-collapse: collapse; }
 thead th {
   font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
   color: var(--muted); text-align: left; padding: 14px 18px;
   background: var(--bg-soft); border-bottom: 1px solid var(--line); white-space: nowrap;
 }
-thead th sup { font-size: .7em; }
 tbody td { padding: 11px 18px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
 tbody tr:last-child td { border-bottom: none; }
-tbody tr.top-row { background: var(--brand-tint); }
 tbody tr:hover { background: var(--bg-tint); }
-tbody tr.top-row:hover { background: #ddf0ec; }
 
-.rank { font-family: var(--mono); font-size: 13px; color: var(--muted); font-weight: 500; width: 44px; }
-.method-cell { min-width: 250px; }
-.method-name { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15px; color: var(--ink); }
-.method-name .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
-.top-badge {
-  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
-  color: var(--brand-deep); background: #fff; border: 1px solid var(--brand); border-radius: 999px; padding: 2px 8px;
-}
-.model-line { font-size: 13px; color: var(--ink-soft); margin-top: 3px; display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
-.ml-tag {
-  font-size: 10px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 5px; margin-right: 1px;
-}
-.ml-tag.edge  { color: var(--edge);  background: #e8f0fe; }
-.ml-tag.cloud { color: var(--cloud); background: #fdeaea; }
-.ml-sep { color: var(--faint); font-weight: 600; margin: 0 2px; }
-.run-detail { font-size: 11.5px; color: var(--muted); margin-top: 3px; font-family: var(--mono); }
-
-.score-cell { width: 26%; min-width: 188px; }
-.score-bar-wrap { display: flex; align-items: center; gap: 10px; }
-.score-bar { flex: 1; height: 8px; background: var(--line-soft); border-radius: 999px; overflow: hidden; min-width: 60px; }
-.score-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--utility), #34c98a); border-radius: 999px; }
-.score-bar-wrap strong { font-size: 14px; font-variant-numeric: tabular-nums; color: var(--ink); }
-
-.compact-metric { width: 108px; text-align: center; font-size: 14px; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
-thead th:nth-child(n+3) { text-align: center; }
-.pass-metric { color: var(--ink-soft); }
-.privacy-metric { color: var(--privacy); }
-.cost-metric { color: var(--cost-text); }
-
-.leaderboard-note { margin-top: 16px; font-size: 13px; color: var(--muted); line-height: 1.55; }
+/* Main results: paper Table 2 screenshot */
+.results-figure { margin-bottom: 0; }
+.results-figure img { max-width: 1000px; margin: 0 auto; }
 
 /* ============================ RESOURCES + CITATION ============================ */
 .resource-split { display: grid; grid-template-columns: 1fr 1.15fr; gap: 24px; align-items: stretch; }

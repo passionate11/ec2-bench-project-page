@@ -1,18 +1,16 @@
 /* ============================================================
-   EC²-Bench — leaderboard + interactive trade-off plot
+   EC²-Bench — interactive trade-off plot + page i18n
    ============================================================ */
 
 const state = {
   results: [],
-  filtered: [],
   points: [],
-  sort: "completion",
   suite: "glm",          // cloud-model setting: "glm" (Table 2) | "dsflash" (Table 11)
   xAxis: "cost",         // plot x-axis: "cost" | "exposure"
   plotEdge: "all"        // plot highlight: "all" | edge model name
 };
 
-const dataVersion = "20261012-ec2";
+const dataVersion = "20261012-ec2d";
 
 /* ============================================================
    i18n — bilingual EN / 中文
@@ -23,10 +21,10 @@ const dataVersion = "20261012-ec2";
 let currentLang = document.documentElement.getAttribute("data-lang") || "en";
 
 const I18N_ZH = {
-  "nav.leaderboard": "排行榜",
   "nav.problem": "动机",
   "nav.benchmark": "基准",
   "nav.strategies": "策略",
+  "nav.results": "主实验",
   "nav.findings": "发现",
   "nav.code": "代码",
 
@@ -34,9 +32,9 @@ const I18N_ZH = {
   "hero.title": `赋能端侧智能体：大模型智能体执行中<br><span class="title-accent">端云协同</span>的系统性分析`,
   "hero.btnCode": "代码与数据",
   "hero.btnPaper": "论文 (PDF)",
-  "hero.btnLeaderboard": "排行榜",
+  "hero.btnResults": "主实验结果",
   "hero.btnBibtex": "BibTeX",
-  "hero.thesis": `当大模型智能体在本地数字工作区中执行长程任务时，云端协助不再是“每个查询路由一次”的一次性决策，而是<strong>穿插在整条执行轨迹之中</strong>，每一次云端调用都可能把累积的工作区上下文带出设备。<strong>EC²-Bench</strong> 让这些轨迹级效应变得可度量：在 128 个可执行工作区任务上，同时从<em>任务表现</em>、<em>资源用量</em>与<em>隐私暴露</em>三个维度评估四种代表性的端云协同策略。`,
+  "hero.thesis": `当大模型智能体在本地工作区执行长程任务时，云端协助不再是一次性的路由决策，而是穿插在整条执行轨迹之中。<strong class="nowrap">EC²-Bench</strong> 在 128 个可执行任务上，从任务表现、资源用量与隐私暴露三个维度评估四种端云协同策略。`,
   "hero.caption": `<strong>总览。</strong>一个代表性的长程工作流，端侧与云端智能体在同一条轨迹上交替参与；我们研究的四种协同策略，区别在于<em>由谁</em>决定云端何时加入、以及云端被调用后<em>做什么</em>；以及三个研究问题。`,
 
   "takeaways.kicker": "要点",
@@ -50,26 +48,6 @@ const I18N_ZH = {
   "takeaways.c4h": "两项端侧能力是关键",
   "takeaways.c4p": `一是知道<strong>何时调用</strong>云端（端侧控制委托比相同调用率的随机调用基线最多高 +4.4）；二是<strong>用好云端的指导</strong>（指令遵循训练使建议模式下的完成度从 24.8 提升到 28.8）。`,
 
-  "lb.kicker": "排行榜",
-  "lb.suiteLabel": "云端模型",
-  "lb.optGlm": "GLM-5.3（主实验）",
-  "lb.optDs": "DeepSeek-V4.1-Flash（附录）",
-  "lb.filterLabel": "策略族",
-  "lb.optAll": "全部策略",
-  "lb.optEdge": "仅端侧",
-  "lb.optCloud": "仅云端",
-  "lb.optEdgeCloud": "端云协同",
-  "lb.edgeLabel": "端侧模型",
-  "lb.optAllEdge": "全部端侧模型",
-  "lb.sortCompletion": "完成度 ↑",
-  "lb.sortExposure": "隐私暴露 ↓",
-  "lb.sortCost": "云成本 ↓",
-  "lb.thMethod": "方法",
-  "lb.thCompletion": "完成度 ↑",
-  "lb.thPass": "Pass",
-  "lb.thExposure": "隐私暴露 ↓",
-  "lb.thCost": "云成本 ↓",
-  "lb.note": `主实验以 GLM-5.3 作为云端模型（论文表 2）；附录设置换成 DeepSeek-V4.1-Flash（表 11）。每行列出端侧 / 云端模型、云端 token（原始 / 缓存读取 / 输出，单位百万）与端侧 FLOPs（PetaFLOPs；Qwen3.7-Plus 参数量未公开，故不报告）。结果为 3 次运行的平均；Pass<sup>3</sup> 统计三次均成功（得分 &gt; 0.7）的任务比例。隐私暴露指在 100 个标注任务上对云端可见的敏感单元占比：<strong>越低越好</strong>。`,
 
   "problem.kicker": "动机",
   "problem.h2": "从一次性路由，到穿插于轨迹的协同。",
@@ -146,6 +124,10 @@ const I18N_ZH = {
   "strat.s6tag": "端侧控制的云端建议",
   "strat.s6p": "默认在端侧执行。端侧智能体向云端请求计划、建议或纠错，然后自己生成动作。",
 
+  "results.kicker": "主实验结果",
+  "results.h2": "EC²-Bench 上的任务表现、资源用量与隐私暴露。",
+  "results.caption": `<strong>主实验结果（论文表 2）。</strong>云端模型为 GLM-5.3，每个配置取 3 次运行的平均。Cloud Tok. (R/C/O) 为原始输入 / 缓存读取 / 输出 token（百万）；云成本单位为美元；端侧 FLOPs 单位为 PetaFLOPs。隐私暴露指对云端可见的标注敏感单元占比（越低越好）。以 DeepSeek-V4.1-Flash 为云端模型的结果见论文附录 A.8。`,
+
   "find.kicker": "关键发现",
   "find.h2": "三个研究问题，同一张图。",
   "find.lede": `所有配置都画在同一张图里。<strong>越靠上</strong>完成度越高；x 轴可在云成本与隐私暴露之间切换（两者都是<strong>越靠左</strong>越好）。虚线连接每个端侧模型的仅端侧点与仅云端点：位于虚线上方的点，优于两端按比例的简单混合。`,
@@ -186,24 +168,22 @@ const I18N_ZH = {
 /* JS-generated strings (both languages, since the source is JS not the DOM). */
 const JS_STR = {
   en: {
-    top: "Top", edge: "Edge", cloud: "Cloud", tok: "Tok", flops: "FLOPs",
     tipCompletion: "Completion", tipCost: "Cloud cost", tipExposure: "Privacy exp.",
     copied: "Copied!", copyFail: "Press Ctrl+C", copy: "Copy",
     axXcost: "Cloud cost (USD)  ·  left is cheaper",
     axXexposure: "Privacy exposure (%)  ·  left is more private",
     axY: "Completion (%)  ·  up is better",
     legEdge: "Edge-only", legCloud: "Cloud-only", legInterp: "Linear interp.",
-    loadErr: m => `Couldn't load results (${m}). Open this page over http(s), or see Table 2 of the paper for the full numbers.`
+    loadErr: m => `Couldn't load plot data (${m}). Open this page over http(s), or see Table 2 in the Main Results section.`
   },
   zh: {
-    top: "最佳", edge: "端", cloud: "云", tok: "Tok", flops: "FLOPs",
     tipCompletion: "完成度", tipCost: "云成本", tipExposure: "隐私暴露",
     copied: "已复制！", copyFail: "请按 Ctrl+C", copy: "复制",
     axXcost: "云成本（美元） ·  越靠左越省",
     axXexposure: "隐私暴露（%） ·  越靠左越私密",
     axY: "完成度（%） ·  越靠上越好",
     legEdge: "仅端侧", legCloud: "仅云端", legInterp: "线性插值",
-    loadErr: m => `结果加载失败（${m}）。请通过 http(s) 打开本页，或查看论文表 2 获取完整数值。`
+    loadErr: m => `图表数据加载失败（${m}）。请通过 http(s) 打开本页，或查看上方“主实验结果”中的表 2。`
   }
 };
 
@@ -250,10 +230,7 @@ function applyLang(lang) {
   try { localStorage.setItem("ec2bench-lang", lang); } catch (e) {}
 
   // Re-render JS-driven content in the new language.
-  if (state.results && state.results.length) {
-    renderLeaderboard();
-    renderTradeoff();
-  }
+  if (state.results && state.results.length) renderTradeoff();
 }
 
 function bindLangToggle() {
@@ -307,8 +284,7 @@ function edgeShort(name) {
 
 const format = {
   percent: value => `${Number(value).toFixed(2)}`,
-  money: value => value === 0 ? "$0.00" : `$${Number(value).toFixed(2)}`,
-  flops: value => value == null ? "–" : `${Number(value).toFixed(0)} P`
+  money: value => value === 0 ? "$0.00" : `$${Number(value).toFixed(2)}`
 };
 
 async function init() {
@@ -324,7 +300,6 @@ async function init() {
     state.results = data.results || [];
     hydrateStats(data.metrics || {});
     bindControls();
-    renderLeaderboard();
     renderTradeoff();
     let resizeTimer;
     window.addEventListener("resize", () => {
@@ -332,9 +307,9 @@ async function init() {
       resizeTimer = setTimeout(renderTradeoff, 120);
     });
   } catch (err) {
-    const body = document.getElementById("leaderboard-body");
-    if (body) {
-      body.innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;color:var(--muted)">${t("loadErr")(err.message)}</td></tr>`;
+    const plot = document.querySelector(".plot-card");
+    if (plot) {
+      plot.insertAdjacentHTML("beforeend", `<p style="padding:12px 4px 0;color:var(--muted);font-size:14px">${t("loadErr")(err.message)}</p>`);
     }
   }
 }
@@ -353,28 +328,11 @@ function suiteRows() {
 
 function setSuite(suite) {
   state.suite = suite;
-  const sel = document.getElementById("suite-filter");
-  if (sel) sel.value = suite;
   syncTabs("#plot-suite-tabs", "suite", suite);
-  renderLeaderboard();
   renderTradeoff();
 }
 
 function bindControls() {
-  ["group-filter", "edge-filter"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener("change", renderLeaderboard);
-  });
-  const suiteSel = document.getElementById("suite-filter");
-  if (suiteSel) suiteSel.addEventListener("change", () => setSuite(suiteSel.value));
-
-  document.querySelectorAll(".leaderboard-tabs button[data-sort]").forEach(button => {
-    button.addEventListener("click", () => {
-      state.sort = button.dataset.sort;
-      syncTabs(".leaderboard-tabs", "sort", state.sort);
-      renderLeaderboard();
-    });
-  });
   document.querySelectorAll("#plot-x-tabs button[data-x]").forEach(button => {
     button.addEventListener("click", () => {
       state.xAxis = button.dataset.x;
@@ -470,62 +428,6 @@ function bindActiveNavigation() {
   updateActive();
   window.addEventListener("scroll", updateActive, { passive: true });
   window.addEventListener("resize", updateActive);
-}
-
-function getSortedResults() {
-  const groupEl = document.getElementById("group-filter");
-  const edgeEl = document.getElementById("edge-filter");
-  const group = groupEl ? groupEl.value : "all";
-  const edge = edgeEl ? edgeEl.value : "all";
-  const sort = state.sort;
-  const rows = suiteRows().filter(item =>
-    (group === "all" || item.group === group) &&
-    (edge === "all" || item.edgeModel === edge || (item.group === "Cloud-only" && group !== "Edge-Cloud")));
-  const sorted = [...rows];
-  sorted.sort((a, b) => {
-    if (sort === "exposureAsc") return a.privacyExposure - b.privacyExposure || b.completion - a.completion;
-    if (sort === "cloudCostAsc") return a.cloudCost - b.cloudCost || b.completion - a.completion;
-    return b.completion - a.completion || a.privacyExposure - b.privacyExposure;
-  });
-  return sorted;
-}
-
-function modelLine(item) {
-  const parts = [];
-  if (item.edgeModel)
-    parts.push(`<span class="ml-tag edge">${t("edge")}</span>${item.edgeModel}`);
-  if (item.cloudModel)
-    parts.push(`<span class="ml-tag cloud">${t("cloud")}</span>${item.cloudModel}`);
-  return parts.join('<span class="ml-sep">+</span>') || item.model;
-}
-
-function renderLeaderboard() {
-  const body = document.getElementById("leaderboard-body");
-  if (!body) return;
-  state.filtered = getSortedResults();
-  body.innerHTML = state.filtered.map((item, index) => `
-    <tr class="${index === 0 ? "top-row" : ""}">
-      <td class="rank">${index + 1}</td>
-      <td class="method-cell">
-        <div class="method-name">
-          <span class="dot" style="background:${methodColors[item.method] || groupColors[item.group]}"></span>
-          <span>${methodLabel(item.method)}</span>
-          ${index === 0 ? `<span class="top-badge">${t("top")}</span>` : ""}
-        </div>
-        <div class="model-line">${modelLine(item)}</div>
-        <div class="run-detail">${t("tok")} ${item.cloudTokens || "–"} · ${t("flops")} ${format.flops(item.edgeFlops)}</div>
-      </td>
-      <td class="score-cell">
-        <div class="score-bar-wrap">
-          <div class="score-bar"><span style="width:${Math.max(0, Math.min(100, item.completion))}%"></span></div>
-          <strong>${format.percent(item.completion)}%</strong>
-        </div>
-      </td>
-      <td class="compact-metric pass-metric">${format.percent(item.pass3)}%</td>
-      <td class="compact-metric privacy-metric">${format.percent(item.privacyExposure)}%</td>
-      <td class="compact-metric cost-metric">${item.group === "Edge-only" ? "–" : format.money(item.cloudCost)}</td>
-    </tr>
-  `).join("");
 }
 
 /* ---------------------- Trade-off plot ---------------------- */
@@ -851,7 +753,7 @@ function setupReveal() {
   const selectors = [
     ".section-head", ".tldr-card", ".metric-band", ".compare-shell", ".axis-card",
     ".taxonomy", ".problem-card", ".strategy-col", ".plot-card", ".finding", ".fig-pair",
-    ".findings-footnote", ".leaderboard-toolbar", ".table-shell", ".leaderboard-note",
+    ".findings-footnote", ".table-shell", ".wide-figure",
     ".resource-card", ".citation-card", ".authors-block"
   ];
   const els = [];
