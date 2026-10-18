@@ -31,9 +31,12 @@ python3 -m http.server 8080
 
 - **Main results** — `assets/figures/table2-main-results.png` is cropped from the paper PDF
   (`tools/crop_table.py` in the build folder); re-crop it whenever Table 2 changes.
-- **Figures 2 and 3** — `assets/figures/fig2*-v2.png` and `fig3*-v2.png` are redrawn from the
-  Table 2 numbers (`tools/build.sh` in the build folder regenerates them). Figures 1 and 4
-  are rendered from the paper's figure PDFs.
+- **Figures** — all paper figures are rendered from the paper PDF so the page matches it
+  exactly: `fig2*-v3.png` and `fig3*-v3.png` are cropped from the PDF pages (each (a)/(b)
+  pair padded to a common size, 1000 px wide); Figures 1 and 4 come from the paper's figure
+  PDFs. When a figure changes in the paper, re-crop it and bump the `-vN` suffix so browsers
+  do not serve the cached image. (`tools/build.sh` in the build folder still redraws the
+  older `-v2` versions from `results.tsv`; those are no longer used by the page.)
 - **Copy / narrative** — edit `index.html` directly. Every translatable node has a
   `data-i18n` key; its Chinese text lives in `I18N_ZH` in `assets/app.js` — update both.
 - **Design tokens** — colors, spacing, and fonts live in the `:root` block of
