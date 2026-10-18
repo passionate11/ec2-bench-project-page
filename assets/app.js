@@ -28,9 +28,10 @@ const I18N_ZH = {
   "hero.s3": "敏感信息单元",
   "hero.s4": "协同策略",
   "hero.note": `端侧模型：Qwen3.5-2B / 9B / 27B、Qwen3.7-Plus · 云端模型：GLM-5.3 · 智能体框架：OpenClaw`,
-  "hero.btnCode": "代码与数据",
-  "hero.btnPaper": "论文 (PDF)",
-  "hero.btnResults": "主实验结果",
+  "hero.btnCode": "代码",
+  "hero.btnPaper": "论文",
+  "hero.btnData": "数据集",
+  "hero.btnResults": "主实验",
   "hero.btnBibtex": "BibTeX",
   "hero.caption": `<strong>总览。</strong>一个代表性的长程工作流，端侧与云端智能体在同一条轨迹上交替参与；我们研究的四种协同策略，区别在于<em>由谁</em>决定云端何时加入、以及云端被调用后<em>做什么</em>；以及三个研究问题。`,
 
@@ -128,6 +129,7 @@ const I18N_ZH = {
 
   "results.kicker": "主实验结果",
   "results.h2": "所有配置的主实验结果。",
+  "results.textSummary": "以文本形式查看此表",
   "results.caption": `<strong>主实验结果（论文表 2）。</strong>云端模型为 GLM-5.3，每个配置取 3 次运行的平均。Cloud Tok. (R/C/O) 为原始输入 / 缓存读取 / 输出 token（百万）；云成本单位为美元；端侧 FLOPs 单位为 PetaFLOPs。隐私暴露指对云端可见的标注敏感单元占比（越低越好）。以 DeepSeek-V4.1-Flash 为云端模型的结果见论文附录 A.8。`,
 
   "find.kicker": "关键发现",
@@ -157,6 +159,8 @@ const I18N_ZH = {
   "res.c2h": "完整论文",
   "res.c2p": "问题形式化、任务构建、隐私标注与验证，以及完整的实证研究。",
   "res.c2go": "阅读 PDF",
+  "res.c3h": "Hugging Face 数据集",
+  "res.c3p": "任务索引、工作区压缩包，以及预构建的 OpenClaw Docker 镜像。",
   "res.copy": "复制",
 
   "authors.h": "作者",
@@ -196,8 +200,8 @@ function applyLang(lang) {
   });
 
   document.title = lang === "zh"
-    ? "EC²-Bench · 长程大模型智能体的端云协同基准"
-    : "EC²-Bench · Edge-Cloud Collaboration for Long-Horizon LLM Agents";
+    ? "EC²-Bench (EC2-Bench) · 长程大模型智能体的端云协同基准"
+    : "EC²-Bench (EC2-Bench) · Empowering Edge Agents: Edge-Cloud Collaboration in LLM Agent Execution";
   const lbl = document.getElementById("lang-toggle-label");
   if (lbl) lbl.textContent = lang === "zh" ? "EN" : "中文";
 

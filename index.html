@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="EC²-Bench: a benchmark for edge-cloud collaboration in long-horizon LLM agent execution, measuring task performance, resource usage, and privacy exposure together."
+      content="EC²-Bench (EC2-Bench) is a benchmark for edge-cloud collaboration in long-horizon LLM agents, jointly measuring task performance, resource usage and privacy exposure. Paper: arXiv 2610.17816."
     >
     <meta property="og:title" content="EC²-Bench — Edge-Cloud Collaboration in Long-Horizon LLM Agents">
     <meta property="og:description" content="When cloud help is interleaved throughout an agent trajectory, how should edge and cloud collaborate? EC²-Bench measures task performance, resource usage, and privacy exposure jointly.">
@@ -20,12 +20,68 @@
     <meta property="og:url" content="https://passionate11.github.io/ec2-bench-project-page/">
     <meta property="og:image" content="https://passionate11.github.io/ec2-bench-project-page/assets/figures/fig1-overview.png">
     <meta name="twitter:image" content="https://passionate11.github.io/ec2-bench-project-page/assets/figures/fig1-overview.png">
-    <title>EC²-Bench · Edge-Cloud Collaboration for Long-Horizon LLM Agents</title>
+    <title>EC²-Bench (EC2-Bench) · Empowering Edge Agents: Edge-Cloud Collaboration in LLM Agent Execution</title>
+    <!-- Google Scholar (Highwire Press) tags -->
+    <meta name="citation_title" content="Empowering Edge Agents: A Systematic Analysis of Edge-Cloud Collaboration in LLM Agent Execution">
+    <meta name="citation_author" content="Huang, Pengcheng">
+    <meta name="citation_author" content="Liu, Zhenghao">
+    <meta name="citation_author" content="Ren, Shixin">
+    <meta name="citation_author" content="Yu, Shi">
+    <meta name="citation_author" content="Yao, Sijia">
+    <meta name="citation_author" content="Yan, Yukun">
+    <meta name="citation_author" content="Xiao, Chaojun">
+    <meta name="citation_author" content="Sun, Maosong">
+    <meta name="citation_publication_date" content="2026/10/13">
+    <meta name="citation_arxiv_id" content="2610.17816">
+    <meta name="citation_pdf_url" content="https://passionate11.github.io/ec2-bench-project-page/paper.pdf">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ScholarlyArticle",
+          "@id": "https://arxiv.org/abs/2610.17816",
+          "headline": "Empowering Edge Agents: A Systematic Analysis of Edge-Cloud Collaboration in LLM Agent Execution",
+          "alternativeHeadline": "EC2-Bench: edge-cloud collaboration benchmark for long-horizon LLM agents",
+          "description": "EC2-Bench is a benchmark for edge-cloud collaboration in long-horizon LLM agents, jointly measuring task performance, resource usage and privacy exposure. It pairs 128 executable digital-workspace tasks (100 with fine-grained sensitivity annotations) with a unified OpenClaw execution and evaluation environment, and studies four collaboration strategies: query routing, per-step routing, edge-controlled delegation and edge-controlled advisory.",
+          "datePublished": "2026-10-13",
+          "url": "https://passionate11.github.io/ec2-bench-project-page/",
+          "sameAs": ["https://arxiv.org/abs/2610.17816", "https://huggingface.co/papers/2610.17816"],
+          "image": "https://passionate11.github.io/ec2-bench-project-page/assets/figures/fig1-overview.png",
+          "keywords": ["EC2-Bench", "edge-cloud collaboration", "LLM agents", "long-horizon agents", "on-device LLM", "LLM routing", "privacy exposure", "agent benchmark", "OpenClaw"],
+          "author": [
+            {"@type": "Person", "name": "Pengcheng Huang"},
+            {"@type": "Person", "name": "Zhenghao Liu"},
+            {"@type": "Person", "name": "Shixin Ren"},
+            {"@type": "Person", "name": "Shi Yu"},
+            {"@type": "Person", "name": "Sijia Yao"},
+            {"@type": "Person", "name": "Yukun Yan"},
+            {"@type": "Person", "name": "Chaojun Xiao"},
+            {"@type": "Person", "name": "Maosong Sun"}
+          ]
+        },
+        {
+          "@type": "Dataset",
+          "name": "EC2-Bench",
+          "alternateName": ["EC²-Bench", "Edge-Cloud Collaborative Agent Benchmark"],
+          "description": "EC2-Bench is a benchmark for edge-cloud collaboration in long-horizon LLM agents, jointly measuring task performance, resource usage and privacy exposure. It contains 128 executable digital-workspace agent tasks in English and Chinese across six categories, 100 of them with fine-grained privacy annotations (3,385 sensitivity units), a prebuilt OpenClaw Docker environment, and graders.",
+          "url": "https://huggingface.co/datasets/chengpingan/EC2-Bench",
+          "sameAs": ["https://github.com/OpenBMB/EC2-Bench", "https://passionate11.github.io/ec2-bench-project-page/"],
+          "license": "https://opensource.org/licenses/MIT",
+          "isAccessibleForFree": true,
+          "inLanguage": ["en", "zh"],
+          "keywords": ["edge-cloud collaboration", "LLM agents", "agent benchmark", "privacy", "LLM routing", "OpenClaw"],
+          "citation": "https://arxiv.org/abs/2610.17816",
+          "creator": {"@type": "Organization", "name": "OpenBMB", "url": "https://github.com/OpenBMB"}
+        }
+      ]
+    }
+    </script>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d9488'/%3E%3Ctext x='30' y='42' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='26' font-weight='700' fill='white'%3EEC%3Ctspan font-size='15' dy='-11'%3E2%3C/tspan%3E%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/styles.css?v=20261012-ec2o">
+    <link rel="stylesheet" href="assets/styles.css?v=20261018-seo1">
     <script>
       (function () {
         var saved = null;
@@ -98,10 +154,13 @@
             <p class="hero-lede" data-i18n="hero.lede">When LLM agents take on long-horizon work in local workspaces, cloud help is interleaved throughout the trajectory. <strong>EC²-Bench</strong> evaluates four edge–cloud collaboration strategies on 128 executable tasks, jointly measuring task performance, resource usage, and privacy exposure.</p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="https://github.com/OpenBMB/EC2-Bench" target="_blank" rel="noopener">
-                <svg class="ic" aria-hidden="true"><use href="#ic-code"/></svg><span data-i18n="hero.btnCode">Code &amp; Data</span>
+                <svg class="ic" aria-hidden="true"><use href="#ic-code"/></svg><span data-i18n="hero.btnCode">Code</span>
               </a>
-              <a class="btn" href="paper.pdf" target="_blank" rel="noopener">
-                <svg class="ic" aria-hidden="true"><use href="#ic-doc"/></svg><span data-i18n="hero.btnPaper">Paper (PDF)</span>
+              <a class="btn" href="https://arxiv.org/abs/2610.17816" target="_blank" rel="noopener">
+                <svg class="ic" aria-hidden="true"><use href="#ic-doc"/></svg><span data-i18n="hero.btnPaper">Paper</span>
+              </a>
+              <a class="btn" href="https://huggingface.co/datasets/chengpingan/EC2-Bench" target="_blank" rel="noopener">
+                <svg class="ic" aria-hidden="true"><use href="#ic-folder"/></svg><span data-i18n="hero.btnData">Dataset</span>
               </a>
               <a class="btn" href="#results">
                 <svg class="ic" aria-hidden="true"><use href="#ic-chart"/></svg><span data-i18n="hero.btnResults">Results</span>
@@ -386,6 +445,44 @@
               Results with DeepSeek-V4.1-Flash as the cloud model are in Appendix A.8 of the paper.
             </figcaption>
           </figure>
+          <details class="results-text">
+            <summary data-i18n="results.textSummary">Show this table as text</summary>
+            <div class="table-shell">
+              <table class="results-table">
+                <thead><tr><th>Method</th><th>Completion ↑</th><th>Pass³ ↑</th><th>Cloud Tok. (R/C/O)</th><th>Cloud Cost ↓</th><th>Edge FLOPs ↓</th><th>Privacy Exp. ↓</th></tr></thead>
+                <tbody>
+                  <tr class="grp"><td colspan="7">Edge-only</td></tr>
+                  <tr><td>Qwen3.5-2B</td><td>12.75</td><td>2.34</td><td>–</td><td>–</td><td>142.98</td><td>0.00</td></tr>
+                  <tr><td>Qwen3.5-9B</td><td>39.12</td><td>9.38</td><td>–</td><td>–</td><td>121.64</td><td>0.00</td></tr>
+                  <tr><td>Qwen3.5-27B</td><td>61.79</td><td>30.47</td><td>–</td><td>–</td><td>564.49</td><td>0.00</td></tr>
+                  <tr><td>Qwen3.7-Plus</td><td>71.34</td><td>53.12</td><td>–</td><td>–</td><td>–</td><td>0.00</td></tr>
+                  <tr class="grp"><td colspan="7">Cloud-only</td></tr>
+                  <tr><td>DeepSeek-v4-Pro</td><td>72.90</td><td>53.12</td><td>5.81 / 50.20 / 1.60</td><td>16.41</td><td>–</td><td>86.66</td></tr>
+                  <tr><td>GLM-5.3</td><td>82.70</td><td>71.88</td><td>13.52 / 65.76 / 4.64</td><td>56.42</td><td>–</td><td>87.01</td></tr>
+                  <tr class="grp"><td colspan="7">Edge-cloud: Qwen3.5-2B + GLM-5.3</td></tr>
+                  <tr><td class="ind">Query Routing</td><td>23.98</td><td>12.50</td><td>1.81 / 10.49 / 0.79</td><td>8.76</td><td>156.30</td><td>12.59</td></tr>
+                  <tr><td class="ind">Per-step Routing</td><td>39.97</td><td>7.81</td><td>3.84 / 17.29 / 0.67</td><td>12.80</td><td>57.05</td><td>41.29</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Delegation</td><td>15.86</td><td>2.34</td><td>0.41 / 0.49 / 0.11</td><td>1.19</td><td>172.74</td><td>2.71</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Advisory</td><td>14.75</td><td>1.56</td><td>0.67 / 0.51 / 0.29</td><td>2.36</td><td>240.28</td><td>6.07</td></tr>
+                  <tr class="grp"><td colspan="7">Edge-cloud: Qwen3.5-9B + GLM-5.3</td></tr>
+                  <tr><td class="ind">Query Routing</td><td>43.60</td><td>17.97</td><td>2.13 / 11.28 / 0.78</td><td>9.33</td><td>162.88</td><td>12.59</td></tr>
+                  <tr><td class="ind">Per-step Routing</td><td>52.71</td><td>21.88</td><td>1.98 / 7.46 / 0.31</td><td>6.07</td><td>29.96</td><td>27.52</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Delegation</td><td>52.88</td><td>17.19</td><td>0.83 / 1.03 / 0.36</td><td>3.01</td><td>184.98</td><td>16.45</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Advisory</td><td>60.46</td><td>26.56</td><td>2.02 / 2.61 / 1.19</td><td>8.73</td><td>332.43</td><td>45.46</td></tr>
+                  <tr class="grp"><td colspan="7">Edge-cloud: Qwen3.5-27B + GLM-5.3</td></tr>
+                  <tr><td class="ind">Query Routing</td><td>65.53</td><td>38.28</td><td>2.69 / 14.29 / 0.75</td><td>10.76</td><td>649.92</td><td>12.53</td></tr>
+                  <tr><td class="ind">Per-step Routing</td><td>68.42</td><td>42.19</td><td>1.76 / 6.51 / 0.26</td><td>5.29</td><td>88.58</td><td>35.81</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Delegation</td><td>69.06</td><td>44.53</td><td>1.00 / 1.50 / 0.71</td><td>4.93</td><td>455.76</td><td>42.42</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Advisory</td><td>70.13</td><td>47.66</td><td>1.32 / 0.75 / 0.83</td><td>5.71</td><td>822.23</td><td>48.46</td></tr>
+                  <tr class="grp"><td colspan="7">Edge-cloud: Qwen3.7-Plus + GLM-5.3</td></tr>
+                  <tr><td class="ind">Query Routing</td><td>73.17</td><td>60.16</td><td>4.39 / 15.60 / 0.88</td><td>14.03</td><td>–</td><td>12.51</td></tr>
+                  <tr><td class="ind">Per-step Routing</td><td>73.77</td><td>56.25</td><td>2.17 / 4.95 / 0.22</td><td>5.28</td><td>–</td><td>53.17</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Delegation</td><td>74.24</td><td>60.94</td><td>1.65 / 1.08 / 0.33</td><td>4.03</td><td>–</td><td>43.36</td></tr>
+                  <tr><td class="ind">Edge-Ctrl. Advisory</td><td>76.84</td><td>67.19</td><td>1.97 / 0.53 / 0.88</td><td>6.80</td><td>–</td><td>78.74</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -496,13 +593,21 @@
                 <p data-i18n="res.c1p">Tasks, executable workspaces, verifiers, sensitivity annotations, and the evaluation harness.</p>
                 <span class="res-go">github.com/OpenBMB/EC2-Bench <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></span>
               </a>
-              <a class="resource-card" href="paper.pdf" target="_blank" rel="noopener">
+              <a class="resource-card" href="https://huggingface.co/datasets/chengpingan/EC2-Bench" target="_blank" rel="noopener">
+                <div class="res-head">
+                  <span class="res-icon"><svg class="ic" aria-hidden="true"><use href="#ic-folder"/></svg></span>
+                  <h3 data-i18n="res.c3h">Dataset on Hugging Face</h3>
+                </div>
+                <p data-i18n="res.c3p">Task index, workspace tarball, and the prebuilt OpenClaw Docker image.</p>
+                <span class="res-go">huggingface.co/datasets/chengpingan/EC2-Bench <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></span>
+              </a>
+              <a class="resource-card" href="https://arxiv.org/abs/2610.17816" target="_blank" rel="noopener">
                 <div class="res-head">
                   <span class="res-icon"><svg class="ic" aria-hidden="true"><use href="#ic-doc"/></svg></span>
                   <h3 data-i18n="res.c2h">Full Paper</h3>
                 </div>
                 <p data-i18n="res.c2p">Formulation, task construction, privacy annotation and validation, and the complete study.</p>
-                <span class="res-go"><span data-i18n="res.c2go">Read the PDF</span> <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></span>
+                <span class="res-go">arxiv.org/abs/2610.17816 <svg class="ic" aria-hidden="true"><use href="#ic-arrow"/></svg></span>
               </a>
             </div>
 
@@ -513,16 +618,16 @@
                   <svg class="ic" aria-hidden="true"><use href="#ic-copy"/></svg><span data-i18n="res.copy">Copy</span>
                 </button>
               </div>
-              <pre><code id="bibtex-code">@misc{huang2026ec2bench,
-  title  = {Empowering Edge Agents: A Systematic
-            Analysis of Edge-Cloud Collaboration
-            in LLM Agent Execution},
-  author = {Huang, Pengcheng and Liu, Zhenghao and
-            Ren, Shixin and Yu, Shi and Yao, Sijia
-            and Yan, Yukun and Xiao, Chaojun and
-            Sun, Maosong},
-  year   = {2026},
-  url    = {https://github.com/OpenBMB/EC2-Bench}
+              <pre><code id="bibtex-code">@article{huang2026ec2bench,
+  title   = {Empowering Edge Agents: A Systematic
+             Analysis of Edge-Cloud Collaboration
+             in LLM Agent Execution},
+  author  = {Huang, Pengcheng and Liu, Zhenghao and
+             Ren, Shixin and Yu, Shi and Yao, Sijia
+             and Yan, Yukun and Xiao, Chaojun and
+             Sun, Maosong},
+  journal = {arXiv preprint arXiv:2610.17816},
+  year    = {2026}
 }</code></pre>
             </div>
           </div>
@@ -570,6 +675,6 @@
       </div>
     </footer>
 
-    <script src="assets/app.js?v=20261018-ec2q"></script>
+    <script src="assets/app.js?v=20261018-seo1"></script>
   </body>
 </html>

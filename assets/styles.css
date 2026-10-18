@@ -644,3 +644,16 @@ footer { border-top: 1px solid var(--line); padding: 36px 0; background: var(--b
   .hero { background: none; }
   .btn, .nav-cta, .copy-btn { box-shadow: none; }
 }
+
+/* Main results: text version of Table 2 (collapsed under the screenshot) */
+.results-text { max-width: 1000px; margin: 18px auto 0; }
+.results-text summary {
+  cursor: pointer; font-size: 14px; font-weight: 600; color: var(--brand);
+  width: fit-content; margin: 0 auto 12px; list-style-position: inside;
+}
+.results-table { min-width: 760px; font-variant-numeric: tabular-nums; }
+.results-table thead th { padding: 10px 12px; text-transform: none; letter-spacing: 0; }
+.results-table thead th:not(:first-child), .results-table tbody td:not(:first-child) { text-align: right; }
+.results-table tbody td { padding: 7px 12px; font-size: 13.5px; color: var(--ink-soft); white-space: nowrap; }
+.results-table tr.grp td { background: var(--bg-soft); color: var(--ink); font-weight: 700; font-size: 12.5px; text-align: left; }
+.results-table td.ind { padding-left: 26px; }

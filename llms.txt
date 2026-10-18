@@ -1,0 +1,29 @@
+# EC²-Bench (EC2-Bench)
+
+> EC2-Bench is a benchmark for edge-cloud collaboration in long-horizon LLM agents, jointly measuring task performance, resource usage and privacy exposure. Paper: "Empowering Edge Agents: A Systematic Analysis of Edge-Cloud Collaboration in LLM Agent Execution" (Huang et al., 2026, arXiv:2610.17816).
+
+In long-horizon agent execution, cloud participation is interleaved throughout the trajectory rather than decided once per query, so each cloud call shapes later steps, accumulates cost, and decides how much workspace information leaves the device. EC2-Bench pairs 128 executable digital-workspace tasks (English and Chinese, 6 categories; 100 with fine-grained sensitivity annotations totalling 3,385 units) with a unified OpenClaw execution and evaluation environment. It compares edge-only and cloud-only execution with four collaboration strategies: Query Routing, Per-step Routing, Edge-controlled Delegation and Edge-controlled Advisory. Edge models: Qwen3.5-2B / 9B / 27B and Qwen3.7-Plus; main cloud model: GLM-5.3; DeepSeek-V4.1-Flash as an alternative cloud model.
+
+Key findings:
+
+- Edge-cloud collaboration works for long-horizon agents: with Qwen3.5-2B, Per-step Routing lifts completion from 12.75 (edge-only) to 39.97 at 22.7% of cloud-only cost.
+- Stronger edges close the performance gap, not the privacy gap: the best collaborative configuration rises from 39.97 (2B) to 76.84 (Qwen3.7-Plus), approaching cloud-only 82.70; across strategies, completion differs by only 3.67 points with Qwen3.7-Plus while privacy exposure differs by 66.23 points.
+- The best collaboration mode shifts with edge capability: weak edges gain most from external routing and direct cloud execution, stronger edges from edge-controlled invocation and cloud advisory. Two edge-side abilities matter: deciding when to invoke the cloud, and following cloud guidance.
+
+## Links
+
+- [Paper (arXiv 2610.17816)](https://arxiv.org/abs/2610.17816): full paper
+- [Code (GitHub)](https://github.com/OpenBMB/EC2-Bench): tasks, graders, evaluation harness, leaderboard
+- [Dataset (Hugging Face)](https://huggingface.co/datasets/chengpingan/EC2-Bench): task index, workspaces, prebuilt Docker image
+- [Project page](https://passionate11.github.io/ec2-bench-project-page/): overview, figures, main results table
+
+## Citation
+
+```bibtex
+@article{huang2026ec2bench,
+  title   = {Empowering Edge Agents: A Systematic Analysis of Edge-Cloud Collaboration in LLM Agent Execution},
+  author  = {Huang, Pengcheng and Liu, Zhenghao and Ren, Shixin and Yu, Shi and Yao, Sijia and Yan, Yukun and Xiao, Chaojun and Sun, Maosong},
+  journal = {arXiv preprint arXiv:2610.17816},
+  year    = {2026}
+}
+```
