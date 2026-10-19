@@ -40,7 +40,7 @@ const I18N_ZH = {
   "takeaways.c1h": "端云协同对长程智能体有效",
   "takeaways.c1p": `只在部分时候引入云端，就能以很小的成本补回可观的能力：以 Qwen3.5-2B 为端侧时，逐步路由把完成度从 <strong>12.75 提升到 39.97</strong>，云成本只有仅云端的 <strong>22.7%</strong>。`,
   "takeaways.c2h": "端侧越强，性能趋同，隐私不趋同",
-  "takeaways.c2p": `各策略之间的完成度差距从 <strong>25.22</strong> 分（Qwen3.5-2B）收窄到 <strong>3.67</strong> 分（Qwen3.7-Plus）。隐私暴露却没有趋同：以 Qwen3.7-Plus 为端侧时，各策略完成度只差 3.67 分，隐私暴露却相差 <strong>66.23</strong> 分。`,
+  "takeaways.c2p": `端侧模型越强，协同效果越接近纯云端。以 Qwen3.5-27B 为端侧时，端侧控制建议策略能以仅 <strong>10%</strong> 的云端成本，达到纯云端 <strong>85%</strong> 的完成效果。但隐私暴露依然高度策略相关：各策略完成度只差不到 5 分，隐私暴露差距却高达 <strong>35.93</strong> 分。`,
   "takeaways.c3h": "最优协同方式随之转移",
   "takeaways.c3p": `端侧较弱时，最好由<strong>路由器</strong>把步骤交给云端执行（2B：逐步路由 39.97，端侧控制委托仅 15.86）；端侧变强后，最好由端侧<strong>自己</strong>决定何时调用云端，并只采纳它的<strong>建议</strong>（Qwen3.7-Plus：端侧控制建议 76.84）。`,
   "takeaways.c4h": "两项端侧能力是关键",
