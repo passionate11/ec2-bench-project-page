@@ -570,6 +570,35 @@
         </div>
       </section>
 
+      <!-- ============================ RELATED WORK ============================ -->
+      <section id="related-work" class="section" lang="en" aria-labelledby="related-work-title">
+        <div class="content-shell">
+          <div class="section-head">
+            <h2 id="related-work-title">Related work on on-device agents and cloud assistance</h2>
+            <p class="section-lede">
+              When a small on-device model needs help during multi-step tool use, a cloud model can generate the
+              next action or give advice while the local agent still chooses the action. EC²-Bench compares both forms
+              of agent-initiated help with external routing at the task or step level and with edge-only and cloud-only
+              baselines. Across 128 executable workspace tasks in OpenClaw, it measures task completion, cloud API
+              usage and cost, estimated edge compute, and how much annotated sensitive information reaches the cloud.
+            </p>
+            <p class="section-lede">
+              EdgeWise trains the local agent to delegate critical steps and also studies delegation by an external
+              judge. Hera learns step-level routing with imitation learning and cost-aware reinforcement learning.
+              <a href="https://arxiv.org/abs/2610.17560">EdgeWise paper</a> ·
+              <a href="https://arxiv.org/abs/2605.24598">Hera paper</a>
+            </p>
+            <p class="section-lede">
+              AgBench compares local, hybrid, and cloud execution across personal devices and workloads, measuring
+              task success, latency, API cost, and data exposure. Minions studies collaboration on reasoning over
+              long documents while keeping the full source documents on-device.
+              <a href="https://arxiv.org/abs/2609.38652">AgBench paper</a> ·
+              <a href="https://arxiv.org/abs/2502.15964">Minions paper</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
       <!-- ============================ RESOURCES + CITATION ============================ -->
       <section id="resources" class="section">
         <div class="content-shell">
